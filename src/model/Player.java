@@ -102,7 +102,7 @@ public class Player
 		return myClone;
 	}
 
-	public PokerHand getHand()
+	public Hand getHand()
 	{
 		return myHand;
 	}

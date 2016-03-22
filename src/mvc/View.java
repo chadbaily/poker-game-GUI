@@ -109,12 +109,12 @@ public class View extends Frame
 	public void associateListeners()
 	{
 		Class<? extends Controller> controllerClass;
-		Method incrementMethod;
+		Method numCards;
 		Class<?>[] classArgs;
 
 		controllerClass = myController.getClass();
 
-		incrementMethod = null;
+		numCards = null;
 		classArgs = new Class[1];
 
 		try
@@ -130,7 +130,7 @@ public class View extends Frame
 
 		try
 		{
-			incrementMethod = controllerClass.getMethod("increment", classArgs);
+			numCards = controllerClass.getMethod("getNumCards", classArgs);
 		}
 		catch (NoSuchMethodException exception)
 		{
@@ -154,7 +154,7 @@ public class View extends Frame
 		{
 			args = new Integer[1];
 			args[0] = new Integer(i);
-			myCardListener[i] = new ButtonListener(myController, incrementMethod, args);
+			myCardListener[i] = new ButtonListener(myController, numCards, args);
 			myPlayerCardView[i].addMouseListener(myCardListener[i]);
 		}
 	}

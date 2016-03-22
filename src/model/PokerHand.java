@@ -102,8 +102,8 @@ public class PokerHand extends Hand
 	 */
 	public int getNumberCards()
 	{
-		myNumberCards = myHand.myCards.size();
-		return myNumberCards;
+		// myNumberCards = myHand.myCards.size();
+		return myHand.myCards.size();
 	}
 
 	/**
