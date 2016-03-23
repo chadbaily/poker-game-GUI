@@ -50,7 +50,7 @@ public class Deck
 		{
 			for (CardType t : CardType.values())
 			{
-				Image temp = Toolkit.getDefaultToolkit().getImage("src/cards/3D.GIF");
+				Image temp = Toolkit.getDefaultToolkit().getImage("src/cards/" + t.getType() + p.getSuit() + ".GIF");
 				Card myCard = new Card(p, t, temp);
 				myCards.add(myCard);
 

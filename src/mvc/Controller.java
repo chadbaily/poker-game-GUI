@@ -32,8 +32,8 @@ public class Controller
 	{
 		myPlayer = new Player("Chad");
 		myModel = new PokerModel(myPlayer);
-		myView = new View(this);
 		myModel.dealCards();
+		myView = new View(this);
 	}
 
 	/**
@@ -48,12 +48,12 @@ public class Controller
 	public void getNumCards(Integer iRow)
 	{
 		int value, row;
-		java.awt.Image myImage;
+		Image myImage;
 
 		row = iRow.intValue();
 		myImage = myModel.getPlayerUp().getHand().getCards().get(row).getImage();
 		value = myModel.getPlayerUp().getHand().getNumberCardsInHand();
-		myView.changeImage(row);
+		myView.changeImage(row, myImage);
 		myView.setTextField("" + value);
 	}
 
@@ -84,10 +84,10 @@ public class Controller
 	 *
 	 * @return the model's number value
 	 */
-//	public Image getBack()
-//	{
-//		return myModel.getPlayer(0).getHand().getCards().get(0).getImage();
-//	}
+	public Image getBack()
+	{
+		return myModel.getPlayer(0).getHand().getCards().get(0).getImage();
+	}
 
 	public String getModelValue()
 	{

@@ -56,7 +56,7 @@ public class View extends Frame
 		this.setBackground(Color.gray);
 
 		// myImage = controller.getBack();
-		myXImage = Toolkit.getDefaultToolkit().getImage("src/cards/3C.GIF");
+		myXImage = Toolkit.getDefaultToolkit().getImage("src/cards/3Clubs.GIF");
 		myBlankImage = Toolkit.getDefaultToolkit().getImage("src/cards/E.GIF");
 
 		myCompCardView = new Can[myNumSquares];
@@ -161,17 +161,17 @@ public class View extends Frame
 		}
 	}
 
-	public void changeImage(int row)
+	public void changeImage(int row, Image image)
 	{
-		myPlayerCardView[row].setImage(myXImage);
-//		if (row % 2 == 0)
-//		{
-//			myPlayerCardView[row].setImage(myXImage);
-//		}
-//		else
-//		{
-//			myPlayerCardView[row].setImage(myBlankImage);
-//		}
+		myPlayerCardView[row].setImage(image);
+		// if (row % 2 == 0)
+		// {
+		// myPlayerCardView[row].setImage(myXImage);
+		// }
+		// else
+		// {
+		// myPlayerCardView[row].setImage(myBlankImage);
+		// }
 	}
 
 	/**
