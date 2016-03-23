@@ -37,15 +37,10 @@ public class Controller
 	}
 
 	/**
-	 * Modifies the number value of the model and gives it to the view.
-	 *
-	 * <pre>
-	 * pre:  a valid view and controller have been designated
-	 * post: the number value of the model is increased by one,
-	 *       and the view is modified accordingly
-	 * </pre>
+	 * gets the number of cards in the deck, also flips the cards over to reveal
+	 * which cards are where
 	 */
-	public void getNumCards(Integer iRow)
+	public void flipCardsOver(Integer iRow)
 	{
 		int value, row;
 		Image myImage;
@@ -54,47 +49,23 @@ public class Controller
 		myImage = myModel.getPlayerUp().getHand().getCards().get(row).getImage();
 		value = myModel.getPlayerUp().getHand().getNumberCardsInHand();
 		myView.changeImage(row, myImage);
-		myView.setTextField("" + value);
+		// myView.makeBorder();
 	}
 
-	// /**
-	// * Modifies the number value of the model and gives it to the view.
-	// *
-	// * <pre>
-	// * pre: a valid view and controller have been designated
-	// * post: the number value of the model is decreased by one,
-	// * and the view is modified accordingly
-	// * </pre>
-	// */
-	// public void decrement()
-	// {
-	// int value;
-	// myModel.decrementValue();
-	// value = myModel.getNumberValue();
-	// myView.setTextField("" + value);
-	// }
-
 	/**
-	 * Obtains the number value of the model.
-	 *
-	 * <pre>
-	 * pre:  a valid view and controller have been designated
-	 * post: the number value of the model obtained
-	 * </pre>
-	 *
-	 * @return the model's number value
+	 * Gets an image from the card that is at position 0
+	 * 
+	 * @return
 	 */
 	public Image getBack()
 	{
 		return myModel.getPlayer(0).getHand().getCards().get(0).getImage();
 	}
 
-	public String getModelValue()
+	public String handRanking()
 	{
-		String modelValue;
-
-		modelValue = "" + myModel.getPlayerUp().getHand().getNumberCardsInHand();
-		return modelValue;
+		myModel.getPlayerUp().getHand().orderCards();
+		return "" + myModel.getPlayerUp().getHand().determineRanking();
 	}
 
 }

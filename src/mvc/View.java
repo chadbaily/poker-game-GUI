@@ -12,7 +12,12 @@ package mvc;
 import java.awt.*;
 import java.awt.Image;
 import java.lang.reflect.*;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
 public class View extends Frame
@@ -27,10 +32,11 @@ public class View extends Frame
 	private JPanel myCompCardPanel;
 	private JPanel myPlayerCardPanel;
 	private ButtonListener[] myCardListener;
-	private TextField myTextField;
+	private JTextField myTextField;
 	private Controller myController;
 	private Image myXImage;
 	private Image myImage;
+	private JLabel myLabel;
 	// private Image myOImage;
 	private Image myBlankImage;
 
@@ -55,8 +61,6 @@ public class View extends Frame
 		this.setLayout(null);
 		this.setBackground(Color.gray);
 
-		// myImage = controller.getBack();
-		myXImage = Toolkit.getDefaultToolkit().getImage("src/cards/3Clubs.GIF");
 		myBlankImage = Toolkit.getDefaultToolkit().getImage("src/cards/E.GIF");
 
 		myCompCardView = new Can[myNumSquares];
@@ -84,18 +88,19 @@ public class View extends Frame
 
 		myController = controller;
 
-		value = myController.getModelValue();
-		myTextField = new TextField(value);
-		myTextField.setSize(100, 50);
-		myTextField.setLocation(250, 300);
+		value = myController.handRanking();
+		myLabel = new JLabel(value);
+		myLabel.setSize(getSize());
+		myLabel.setLocation(300, 100);
 
 		this.add(myCompCardPanel);
 		this.add(myPlayerCardPanel);
-		this.add(myTextField);
+		this.add(myLabel);
+		this.pack();
 
-		this.setVisible(true);
 		this.addWindowListener(new AWindowListener());
 		this.associateListeners();
+		this.setVisible(true);
 	}
 
 	/**
@@ -111,12 +116,12 @@ public class View extends Frame
 	public void associateListeners()
 	{
 		Class<? extends Controller> controllerClass;
-		Method numCards;
+		Method flipOver;
 		Class<?>[] classArgs;
 
 		controllerClass = myController.getClass();
 
-		numCards = null;
+		flipOver = null;
 		classArgs = new Class[1];
 
 		try
@@ -132,7 +137,7 @@ public class View extends Frame
 
 		try
 		{
-			numCards = controllerClass.getMethod("getNumCards", classArgs);
+			flipOver = controllerClass.getMethod("flipCardsOver", classArgs);
 		}
 		catch (NoSuchMethodException exception)
 		{
@@ -156,22 +161,22 @@ public class View extends Frame
 		{
 			args = new Integer[1];
 			args[0] = new Integer(i);
-			myCardListener[i] = new ButtonListener(myController, numCards, args);
+			myCardListener[i] = new ButtonListener(myController, flipOver, args);
 			myPlayerCardView[i].addMouseListener(myCardListener[i]);
 		}
 	}
 
+	/**
+	 * When the mouse clicks on a card, the card is then revealed
+	 * 
+	 * @param row
+	 *            the index of the card
+	 * @param image
+	 *            the image passed in
+	 */
 	public void changeImage(int row, Image image)
 	{
 		myPlayerCardView[row].setImage(image);
-		// if (row % 2 == 0)
-		// {
-		// myPlayerCardView[row].setImage(myXImage);
-		// }
-		// else
-		// {
-		// myPlayerCardView[row].setImage(myBlankImage);
-		// }
 	}
 
 	/**
@@ -182,7 +187,18 @@ public class View extends Frame
 	 */
 	public void setTextField(String text)
 	{
-		myTextField.setText(text);
+		myLabel.setText(text);
+	}
+
+	/**
+	 * Makes a border around each Card
+	 */
+	public void makeBorder(int row)
+	{
+		for (int i = 0; i < myNumSquares; i++)
+		{
+			// myPlayerCardView[row].setBorder(new LineBorder(Color.BLUE, 12));
+		}
 	}
 
 }
