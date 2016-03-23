@@ -34,6 +34,7 @@ public class PokerModel
 		myPlayer[0] = player;
 		myPlayer[1] = myCPlayer;
 		myMaxRounds = 6;
+		myIndexPlayerup = 1;
 	}
 
 	/**

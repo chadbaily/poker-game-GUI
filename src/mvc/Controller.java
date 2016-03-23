@@ -1,5 +1,6 @@
 package mvc;
 
+import java.awt.*;
 import model.*;
 
 /**
@@ -47,10 +48,12 @@ public class Controller
 	public void getNumCards(Integer iRow)
 	{
 		int value, row;
+		java.awt.Image myImage;
 
 		row = iRow.intValue();
+		myImage = myModel.getPlayerUp().getHand().getCards().get(row).getImage();
 		value = myModel.getPlayerUp().getHand().getNumberCardsInHand();
-		myView.changeImage(value, row);
+		myView.changeImage(row);
 		myView.setTextField("" + value);
 	}
 
@@ -81,6 +84,11 @@ public class Controller
 	 *
 	 * @return the model's number value
 	 */
+//	public Image getBack()
+//	{
+//		return myModel.getPlayer(0).getHand().getCards().get(0).getImage();
+//	}
+
 	public String getModelValue()
 	{
 		String modelValue;

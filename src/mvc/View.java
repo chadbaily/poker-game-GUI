@@ -10,8 +10,8 @@ package mvc;
  */
 
 import java.awt.*;
+import java.awt.Image;
 import java.lang.reflect.*;
-
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
@@ -30,6 +30,7 @@ public class View extends Frame
 	private TextField myTextField;
 	private Controller myController;
 	private Image myXImage;
+	private Image myImage;
 	// private Image myOImage;
 	private Image myBlankImage;
 
@@ -54,6 +55,7 @@ public class View extends Frame
 		this.setLayout(null);
 		this.setBackground(Color.gray);
 
+		// myImage = controller.getBack();
 		myXImage = Toolkit.getDefaultToolkit().getImage("src/cards/3C.GIF");
 		myBlankImage = Toolkit.getDefaultToolkit().getImage("src/cards/E.GIF");
 
@@ -69,7 +71,7 @@ public class View extends Frame
 
 		myPlayerCardPanel = new JPanel(new GridLayout(1, 0));
 		myPlayerCardPanel.setSize(365, 97);
-		myPlayerCardPanel.setLocation(100, 240);
+		myPlayerCardPanel.setLocation(100, 480);
 		// mySquaresPanel.setBackground(Color.red);
 		// use Image Panel to store cards
 		for (i = 0; i < myNumSquares; i++)
@@ -85,7 +87,7 @@ public class View extends Frame
 		value = myController.getModelValue();
 		myTextField = new TextField(value);
 		myTextField.setSize(100, 50);
-		myTextField.setLocation(400, 400);
+		myTextField.setLocation(250, 300);
 
 		this.add(myCompCardPanel);
 		this.add(myPlayerCardPanel);
@@ -159,16 +161,17 @@ public class View extends Frame
 		}
 	}
 
-	public void changeImage(int num, int row)
+	public void changeImage(int row)
 	{
-		if (0 == num % 2)
-		{
-			myPlayerCardView[row].setImage(myXImage);
-		}
-		else
-		{
-			myPlayerCardView[row].setImage(myBlankImage);
-		}
+		myPlayerCardView[row].setImage(myXImage);
+//		if (row % 2 == 0)
+//		{
+//			myPlayerCardView[row].setImage(myXImage);
+//		}
+//		else
+//		{
+//			myPlayerCardView[row].setImage(myBlankImage);
+//		}
 	}
 
 	/**

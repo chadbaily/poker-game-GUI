@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.Collections;
 import java.util.Random;
 import java.util.Vector;
@@ -48,7 +50,8 @@ public class Deck
 		{
 			for (CardType t : CardType.values())
 			{
-				Card myCard = new Card(p, t, null);
+				Image temp = Toolkit.getDefaultToolkit().getImage("src/cards/3D.GIF");
+				Card myCard = new Card(p, t, temp);
 				myCards.add(myCard);
 
 			}
