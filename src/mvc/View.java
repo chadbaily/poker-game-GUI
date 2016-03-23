@@ -96,7 +96,6 @@ public class View extends Frame
 		this.add(myCompCardPanel);
 		this.add(myPlayerCardPanel);
 		this.add(myLabel);
-		this.pack();
 
 		this.addWindowListener(new AWindowListener());
 		this.associateListeners();
