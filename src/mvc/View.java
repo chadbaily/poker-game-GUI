@@ -1,23 +1,29 @@
 package mvc;
-/**
- * Simple view class used to show how Model-View-Controller
- * is implemented.  This is also the main application.
- * Version 2.0 uses Generics.
- *
- * @author Daniel Plante
- * @version 1.0 (28 January 2002)
- * @version 2.0 (1 February 2008)
- */
 
+/**
+ * View for a Poker Game
+ * @author chadbaily
+ */
 import java.awt.*;
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.lang.reflect.*;
 
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.border.SoftBevelBorder;
 
 @SuppressWarnings("serial")
 public class View extends Frame
@@ -27,18 +33,22 @@ public class View extends Frame
 	//////////////////////
 
 	public final static int myNumSquares = 5;
-	private Can[] myCompCardView;
-	private Can[] myPlayerCardView;
+	private JLabel[] myCompCardView;
+	private JLabel[] myPlayerCardView;
 	private JPanel myCompCardPanel;
 	private JPanel myPlayerCardPanel;
 	private ButtonListener[] myCardListener;
+	private ButtonListener myStartButtonListener;
+	private ButtonListener myDiscardButtonListener;
 	private JTextField myTextField;
 	private Controller myController;
-	private Image myXImage;
-	private Image myImage;
+	private JButton myStartButton;
 	private JLabel myLabel;
-	// private Image myOImage;
+	private JLabel myPlayerInfo;
+	private JLabel myCPlayerInfo;
+	private JFrame myFrame;
 	private Image myBlankImage;
+	private JButton myDiscardButton;
 
 	///////////////////////
 	// Methods //
@@ -54,52 +64,75 @@ public class View extends Frame
 	 */
 	public View(Controller controller)
 	{
+
 		String value;
+
 		int i;
+		myFrame = new JFrame("Swing Version");
+		myFrame.setSize(600, 600);
+		myFrame.setLayout(new GridBagLayout());
 
-		this.setSize(600, 600);
-		this.setLayout(null);
-		this.setBackground(Color.gray);
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
 
-		myBlankImage = Toolkit.getDefaultToolkit().getImage("src/cards/E.GIF");
+		myCompCardView = new JLabel[myNumSquares];
+		myPlayerCardView = new JLabel[myNumSquares];
 
-		myCompCardView = new Can[myNumSquares];
-		myPlayerCardView = new Can[myNumSquares];
-		int valW = 73;
-		int valL = 97;
+		String myButtonText = "Start Game";
+		myStartButton = new JButton(myButtonText);
+
+		myDiscardButton = new JButton("Discard");
 
 		myCardListener = new ButtonListener[myNumSquares];
 		myCompCardPanel = new JPanel(new GridLayout(1, 0));
-		myCompCardPanel.setSize(365, 97);
-		myCompCardPanel.setLocation(100, 80);
-
 		myPlayerCardPanel = new JPanel(new GridLayout(1, 0));
-		myPlayerCardPanel.setSize(365, 97);
-		myPlayerCardPanel.setLocation(100, 480);
-		// mySquaresPanel.setBackground(Color.red);
-		// use Image Panel to store cards
+
+		ImageIcon myBlankImage = new ImageIcon("src/cards/E.GIF");
+
 		for (i = 0; i < myNumSquares; i++)
 		{
-			myCompCardView[i] = new Can(myBlankImage);
-			myPlayerCardView[i] = new Can(myBlankImage);
-			myPlayerCardPanel.add(myPlayerCardView[i]);
-			myCompCardPanel.add(myCompCardView[i]);
+			c.weightx = 1;
+			myCompCardView[i] = new JLabel(myBlankImage, JLabel.CENTER);
+			myPlayerCardView[i] = new JLabel(myBlankImage, JLabel.CENTER);
+
+			myPlayerCardPanel.add(myPlayerCardView[i], c);
+			myCompCardPanel.add(myCompCardView[i], c);
 		}
 
 		myController = controller;
 
-		value = myController.handRanking();
+		value = myController.myPlayerRanking;
 		myLabel = new JLabel(value);
+
+		value = myController.myPlayer.getName() + "\n" + myController.myPlayer.getNumberWins();
+		myPlayerInfo = new JLabel(value);
+
 		myLabel.setSize(getSize());
-		myLabel.setLocation(300, 100);
+		myPlayerInfo.setSize(getSize());
 
-		this.add(myCompCardPanel);
-		this.add(myPlayerCardPanel);
-		this.add(myLabel);
+		c.gridx = 0;
+		c.gridy = 4;
+		myFrame.add(myStartButton, c);
 
-		this.addWindowListener(new AWindowListener());
-		this.associateListeners();
-		this.setVisible(true);
+		c.gridx = 0;
+		c.gridy = 1;
+		myFrame.add(myCompCardPanel, c);
+
+		c.gridx = 0;
+		c.gridy = 3;
+		myFrame.add(myPlayerCardPanel, c);
+
+		c.gridx = 2;
+		c.gridy = 2;
+		myFrame.add(myLabel, c);
+
+		c.gridx = 0;
+		c.gridy = 0;
+		myFrame.add(myPlayerInfo, c);
+
+		this.associateListeners(controller);
+		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		myFrame.setVisible(true);
 	}
 
 	/**
@@ -112,17 +145,18 @@ public class View extends Frame
 	 *       and the method it must invoke
 	 * </pre>
 	 */
-	public void associateListeners()
+	public void associateListeners(Controller controller)
 	{
 		Class<? extends Controller> controllerClass;
-		Method flipOver;
+		Method startGameMethod, selectMethod, discardMethod;
 		Class<?>[] classArgs;
 
-		controllerClass = myController.getClass();
+		controllerClass = controller.getClass();
 
-		flipOver = null;
+		startGameMethod = null;
+		selectMethod = null;
+		discardMethod = null;
 		classArgs = new Class[1];
-
 		try
 		{
 			classArgs[0] = Class.forName("java.lang.Integer");
@@ -133,11 +167,13 @@ public class View extends Frame
 			error = e.toString();
 			System.out.println(error);
 		}
-
 		try
 		{
-			flipOver = controllerClass.getMethod("flipCardsOver", classArgs);
+			selectMethod = controllerClass.getMethod("border", classArgs);
+			startGameMethod = controllerClass.getMethod("startGame", (Class<?>[]) null);
+			discardMethod = controllerClass.getMethod("discard", (Class<?>[]) null);
 		}
+
 		catch (NoSuchMethodException exception)
 		{
 			String error;
@@ -160,9 +196,14 @@ public class View extends Frame
 		{
 			args = new Integer[1];
 			args[0] = new Integer(i);
-			myCardListener[i] = new ButtonListener(myController, flipOver, args);
+			myCardListener[i] = new ButtonListener(myController, selectMethod, args);
 			myPlayerCardView[i].addMouseListener(myCardListener[i]);
 		}
+
+		myStartButtonListener = new ButtonListener(controller, startGameMethod, null);
+		myDiscardButtonListener = new ButtonListener(controller, discardMethod, null);
+		myDiscardButton.addMouseListener(myDiscardButtonListener);
+		myStartButton.addMouseListener(myStartButtonListener);
 	}
 
 	/**
@@ -173,9 +214,10 @@ public class View extends Frame
 	 * @param image
 	 *            the image passed in
 	 */
-	public void changeImage(int row, Image image)
+	public void changeImage(int row, Icon image)
 	{
-		myPlayerCardView[row].setImage(image);
+
+		myPlayerCardView[row].setIcon(image);
 	}
 
 	/**
@@ -184,20 +226,80 @@ public class View extends Frame
 	 * @param text
 	 *            the text string to use in updating the text field
 	 */
-	public void setTextField(String text)
+	public void setCardRanking(String text)
 	{
 		myLabel.setText(text);
 	}
 
 	/**
-	 * Makes a border around each Card
+	 * Sets the Player's Name and total number of wins
+	 * 
+	 * @param name
+	 * @param wins
 	 */
-	public void makeBorder(int row)
+	public void setPlayerInfo(String name, int wins)
 	{
-		for (int i = 0; i < myNumSquares; i++)
+		myPlayerInfo.setText(name + "\n" + wins);
+	}
+
+	/**
+	 * Makes a border around each Card, somewhat
+	 */
+	public void makeBorder(int row, boolean toggleSelected)
+	{
+		if (toggleSelected)
 		{
-			// myPlayerCardView[row].setBorder(new LineBorder(Color.BLUE, 12));
+			// Image image =
+			// myPlayerCardView[row].getIcon().getScaledInstance(widthX,
+			// heightY, image.SCALE_SMOOTH);
+			// icon.setImage(image);
+			//
+			// int borderWidth = 1;
+			// int spaceAroundIcon = 0;
+			// Color borderColor = Color.BLUE;
+			//
+			// BufferedImage bi = new BufferedImage(icon.getIconWidth() + (2 *
+			// borderWidth + 2 * spaceAroundIcon),
+			// icon.getIconHeight() + (2 * borderWidth + 2 * spaceAroundIcon),
+			// BufferedImage.TYPE_INT_ARGB);
+			//
+			// Graphics2D g = bi.createGraphics();
+			// g.setColor(borderColor);
+			// g.drawImage(icon.getImage(), borderWidth + spaceAroundIcon,
+			// borderWidth + spaceAroundIcon, null);
+			//
+			// BasicStroke stroke = new BasicStroke(5); // 5 pixels wide
+			// (thickness
+			// // of the border)
+			// g.setStroke(stroke);
+			//
+			// g.drawRect(0, 0, bi.getWidth() - 1, bi.getHeight() - 1);
+			// g.dispose();
+			//
+			// label = new JLabel(new ImageIcon(bi), JLabel.LEFT);
+			// label.setVerticalAlignment(SwingConstants.TOP);
+			myPlayerCardView[row].setBorder(new LineBorder(Color.RED));
+
 		}
+		else
+			myPlayerCardView[row].setBorder(new EmptyBorder(0, 0, 0, 0));
+	}
+
+	public void removeStart()
+	{
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+
+		myFrame.remove(myStartButton);
+		c.gridx = 0;
+		c.gridy = 4;
+
+		myFrame.add(myDiscardButton, c);
+	}
+
+	public void removeDiscard()
+	{
+		myFrame.remove(myDiscardButton);
 	}
 
 }

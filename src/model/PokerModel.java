@@ -92,6 +92,8 @@ public class PokerModel
 		myRound = 0;
 		myPlayer[0].myHand.myCards.removeAllElements();
 		myPlayer[1].myHand.myCards.removeAllElements();
+		myPlayer[0].myNumberWins = 0;
+		myPlayer[1].myNumberWins = 0;
 		return true;
 	}
 

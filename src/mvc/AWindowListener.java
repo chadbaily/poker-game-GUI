@@ -1,5 +1,4 @@
 package mvc;
-
 /**
  * Handle window events; use the WindowAdapter convenience class
  * to only require overriding window events of interest.
