@@ -40,15 +40,13 @@ public class View extends Frame
 	private ButtonListener[] myCardListener;
 	private ButtonListener myStartButtonListener;
 	private ButtonListener myDiscardButtonListener;
-	private JTextField myTextField;
 	private Controller myController;
 	private JButton myStartButton;
 	private JButton myPlayAgain;
 	private JLabel myLabel;
 	private JLabel myPlayerInfo;
 	private JLabel myCPlayerInfo;
-	private JLabel myPlayerGameInfo;
-	private JLabel myComputerGameInfo;
+	private JLabel myGameInfo;
 	private JFrame myFrame;
 	private ImageIcon myBlankImage;
 	private JButton myDiscardButton;
@@ -110,14 +108,17 @@ public class View extends Frame
 
 		value = myController.myPlayer.getName() + "\n" + myController.myPlayer.getNumberWins();
 		myPlayerInfo = new JLabel(value);
+		
+		
+		value = myController.myModel.getPlayer(1).getName() + "\n" + myController.myModel.getPlayer(1).getNumberWins();
+		myCPlayerInfo = new JLabel(value);
 
-		myPlayerGameInfo = new JLabel();
-		myComputerGameInfo = new JLabel();
+		myGameInfo = new JLabel();
 
 		myLabel.setSize(getSize());
 		myPlayerInfo.setSize(getSize());
-		myPlayerGameInfo.setSize(getSize());
-		myComputerGameInfo.setSize(getSize());
+		myCPlayerInfo.setSize(getSize());
+		myGameInfo.setSize(getSize());
 
 		c.gridx = 0;
 		c.gridy = 4;
@@ -125,11 +126,7 @@ public class View extends Frame
 
 		c.gridx = 0;
 		c.gridy = 5;
-		myFrame.add(myPlayerGameInfo, c);
-		
-		c.gridx = 0;
-		c.gridy = 6;
-		myFrame.add(myComputerGameInfo, c);
+		myFrame.add(myGameInfo, c);
 
 		c.gridx = 0;
 		c.gridy = 1;
@@ -139,13 +136,17 @@ public class View extends Frame
 		c.gridy = 3;
 		myFrame.add(myPlayerCardPanel, c);
 
-		c.gridx = 2;
+		c.gridx = 1;
 		c.gridy = 2;
 		myFrame.add(myLabel, c);
 
 		c.gridx = 0;
 		c.gridy = 0;
 		myFrame.add(myPlayerInfo, c);
+		
+		c.gridx = 1;
+		c.gridy = 0;
+		myFrame.add(myCPlayerInfo, c);
 
 		this.associateListeners(controller);
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -231,10 +232,14 @@ public class View extends Frame
 	 * @param image
 	 *            the image passed in
 	 */
-	public void changeImage(int row, Icon image)
+	public void changePlayerImage(int row, Icon image)
 	{
-
 		myPlayerCardView[row].setIcon(image);
+	}
+	
+	public void changeCompImage(int row, Icon image)
+	{
+		myCompCardView[row].setIcon(image);
 	}
 
 	/**
@@ -258,15 +263,15 @@ public class View extends Frame
 	{
 		myPlayerInfo.setText(name + "\n" + wins);
 	}
-
-	public void setPlayerGametext(String text)
-	{
-		myPlayerGameInfo.setText(text);
-	}
 	
-	public void setComputerGametext(String text)
+	public void setCPlayerInfo(String name, int wins)
 	{
-		myComputerGameInfo.setText(text);
+		myCPlayerInfo.setText(name + "\n" + wins);
+	}
+
+	public void setGametext(String text)
+	{
+		myGameInfo.setText(text);
 	}
 
 	/**

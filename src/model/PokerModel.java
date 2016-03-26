@@ -39,6 +39,7 @@ public class PokerModel
 		myIndexPlayerUp = 0;
 		myPlayer[0] = player;
 		myPlayer[1] = myComputerPlayer;
+		myMaxRounds = 5;
 	}
 	
 	/**
@@ -89,7 +90,7 @@ public class PokerModel
 
 	public Player determineWinner()
 	{
-		myRound = 1;
+
 		if ((myPlayer[0].getNumberWins() >= myPlayer[1].getNumberWins()) && myRound == myMaxRounds)
 		{
 			return myPlayer[0];
@@ -157,7 +158,7 @@ public class PokerModel
 	{
 		return myPlayer[index];
 	}
-	
+
 	/**
 	 * Method to get the index of the Player who's up.
 	 * 

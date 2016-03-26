@@ -57,11 +57,11 @@ public class PokerHand extends Hand
 	 */
 	public int compareTo(PokerHand pokerHand)
 	{
-		if (ranking.ordinal() < pokerHand.determineRanking().ordinal())
+		if (this.determineRanking().ordinal() < pokerHand.determineRanking().ordinal())
 		{
 			return -1;
 		}
-		if (ranking.ordinal() > pokerHand.determineRanking().ordinal())
+		if (this.determineRanking().ordinal() > pokerHand.determineRanking().ordinal())
 		{
 			return 1;
 		}
