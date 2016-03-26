@@ -88,7 +88,9 @@ public class View extends Frame
 		myPlayerCardPanel = new JPanel(new GridLayout(1, 0));
 
 		ImageIcon myBlankImage = new ImageIcon("src/cards/E.GIF");
-
+		/*
+		 * Sets the cards up with 2 rows of 5 cards, there backs facing up
+		 */
 		for (i = 0; i < myNumSquares; i++)
 		{
 			c.weightx = 1;
@@ -299,7 +301,17 @@ public class View extends Frame
 
 	public void removeDiscard()
 	{
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		for (int i = 0; i < myNumSquares; i++)
+		{
+			myPlayerCardPanel.removeMouseListener(myCardListener[i]);
+		}
 		myFrame.remove(myDiscardButton);
+		c.gridx = 0;
+		c.gridy = 4;
+
+		myFrame.add(myStartButton, c);
 	}
 
 }

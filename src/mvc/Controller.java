@@ -113,8 +113,8 @@ public class Controller
 		myPlayer.getHand().orderCards();
 		myPlayerRanking = "" + myPlayer.getHand().determineRanking();
 		myView.setCardRanking(myPlayerRanking);
-		myView.removeDiscard();
-		
+//		myView.removeDiscard();
+
 	}
 
 	public void border(Integer iRow)
