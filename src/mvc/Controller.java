@@ -58,7 +58,7 @@ public class Controller
 				JOptionPane.PLAIN_MESSAGE, null, null, null);
 		myModel.dealCards();
 		myPlayer.getHand().orderCards();
-		myPlayerRanking = "" + myPlayer.getHand().determineRanking();
+		myPlayerRanking = "" + myModel.getPlayer(0).getHand().determineRanking();
 		myView.setCardRanking(myPlayerRanking);
 		boolean test = myPlayer.validateName(myPlayerName);
 
@@ -88,21 +88,30 @@ public class Controller
 	public void discard()
 	{
 		int value;
+		ComputerPlayer myCompPlayer = (ComputerPlayer) myModel.getPlayer(1);
+		Vector<Integer> myCompPlayerDiscards = myCompPlayer.selectCardsToDiscard();
+
 		Vector<Integer> myDiscards = new Vector<Integer>();
-		Vector<Card> myCards = new Vector<Card>();
+
+		Vector<Card> myPlayerCards = new Vector<Card>();
+		Vector<Card> myComputerPlayerCards = new Vector<Card>();
 		value = myPlayer.getHand().getNumberCardsInHand();
 		for (int i = 0; i < value; i++)
 		{
 			if (myPlayer.getHand().getCards().get(i).isSelected())
 			{
-
 				myDiscards.add(i);
-				myCards.add(myPlayer.getHand().getCards().get(i));
-
+				myPlayerCards.add(myPlayer.getHand().getCards().get(i));
 			}
+		}
+
+		for (int i = 0; i < myCompPlayerDiscards.size(); i++)
+		{
+			myComputerPlayerCards.add(myModel.getPlayer(1).getHand().getCards().get(myCompPlayerDiscards.get(i)));
 		}
 		ImageIcon myImage;
 		myPlayer.getHand().discard(myDiscards);
+		myModel.getPlayer(1).getHand().discard(myCompPlayerDiscards);
 		myModel.dealCards();
 		value = myPlayer.getHand().getNumberCardsInHand();
 		myPlayer.getHand().orderCards();
@@ -116,7 +125,8 @@ public class Controller
 		myPlayer.getHand().orderCards();
 		myPlayerRanking = "" + myPlayer.getHand().determineRanking();
 		myView.setCardRanking(myPlayerRanking);
-		myView.setGametext("You Discarded : " + myCards);
+		myView.setPlayerGametext("You Discarded : " + myPlayerCards);
+		myView.setComputerGametext("The AI Discarded : " + myComputerPlayerCards);
 		myView.removeDiscard();
 
 	}

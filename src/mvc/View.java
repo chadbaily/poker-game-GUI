@@ -47,7 +47,8 @@ public class View extends Frame
 	private JLabel myLabel;
 	private JLabel myPlayerInfo;
 	private JLabel myCPlayerInfo;
-	private JLabel myGameInfo;
+	private JLabel myPlayerGameInfo;
+	private JLabel myComputerGameInfo;
 	private JFrame myFrame;
 	private ImageIcon myBlankImage;
 	private JButton myDiscardButton;
@@ -110,11 +111,13 @@ public class View extends Frame
 		value = myController.myPlayer.getName() + "\n" + myController.myPlayer.getNumberWins();
 		myPlayerInfo = new JLabel(value);
 
-		myGameInfo = new JLabel();
+		myPlayerGameInfo = new JLabel();
+		myComputerGameInfo = new JLabel();
 
 		myLabel.setSize(getSize());
 		myPlayerInfo.setSize(getSize());
-		myGameInfo.setSize(getSize());
+		myPlayerGameInfo.setSize(getSize());
+		myComputerGameInfo.setSize(getSize());
 
 		c.gridx = 0;
 		c.gridy = 4;
@@ -122,7 +125,11 @@ public class View extends Frame
 
 		c.gridx = 0;
 		c.gridy = 5;
-		myFrame.add(myGameInfo, c);
+		myFrame.add(myPlayerGameInfo, c);
+		
+		c.gridx = 0;
+		c.gridy = 6;
+		myFrame.add(myComputerGameInfo, c);
 
 		c.gridx = 0;
 		c.gridy = 1;
@@ -252,9 +259,14 @@ public class View extends Frame
 		myPlayerInfo.setText(name + "\n" + wins);
 	}
 
-	public void setGametext(String text)
+	public void setPlayerGametext(String text)
 	{
-		myGameInfo.setText(text);
+		myPlayerGameInfo.setText(text);
+	}
+	
+	public void setComputerGametext(String text)
+	{
+		myComputerGameInfo.setText(text);
 	}
 
 	/**

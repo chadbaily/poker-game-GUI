@@ -1,138 +1,174 @@
 package model;
 
 /**
- * The PokerModel class is code that requires players and a deck, the class will
- * deal players the cards it will switch turns of the players get the player's
- * turn who is up, keep track of the rounds and winner of each round.
+ * @purpose
  * 
- * @outline Dr. Daniel Plante
- * @author Chad Baily
- * @author Delvin Riley
+ * Class that deals with the major components of a poker game,
+ * dealing cards, switching turns, entering the winner, handling
+ * the deck, etc.
  * 
- * @dueDate March 21, 2016
- *
+ * @author Luisa Molina
+ * @author Erica Kok
+ * 
+ *@dueDate 3/21/16
  */
+
 public class PokerModel
 {
 	private Player[] myPlayer;
-	private int myIndexPlayerup;
+	private int myIndexPlayerUp;
 	private int myMaxRounds;
 	private int myRound;
 	private Deck myDeck;
-
+	
 	/**
-	 * The PokerModel constructor passes in a player and creates a computer
-	 * player with the name Bob and "human" player, then gives them a spot in
-	 * the player array.
+	 * Constructor, creates a new PokerModel with Players.
 	 * 
 	 * @param player
+	 * 
+	 * @author Luisa Molina
+	 * @author Erica Kok
 	 */
+
 	public PokerModel(Player player)
 	{
-		ComputerPlayer myCPlayer = new ComputerPlayer("Bob");
 		myPlayer = new Player[2];
+		ComputerPlayer myComputerPlayer = new ComputerPlayer("John");
+		myDeck = new Deck();
+		myDeck.shuffle();
+		myIndexPlayerUp = 0;
 		myPlayer[0] = player;
-		myPlayer[1] = myCPlayer;
-		myMaxRounds = 6;
-		myIndexPlayerup = 1;
+		myPlayer[1] = myComputerPlayer;
 	}
-
+	
 	/**
-	 * The switchTurns method gets the index of the player up and increments it
-	 * every time the method is called.
+	 * Method to switch the turns of the Players.
 	 * 
-	 * @return the index of the next player up
+	 * @return myIndexPlayer++ if myIndexPlayerUp is less than 2
+	 * 
+	 * @author Luisa Molina
+	 * @author Erica Kok
 	 */
+
 	public int switchTurns()
 	{
-		myIndexPlayerup++;
-		return myIndexPlayerup;
+		if(myIndexPlayerUp < myPlayer.length)
+		{
+			return myIndexPlayerUp++;
+		}
+		else
+		{
+			return myIndexPlayerUp = 0;
+		}
 	}
-
+	
 	/**
-	 * The dealCards method creates a new deck called myDeck and for 5
-	 * iterations it deals and adds cards to the both player's hands.
+	 * Method to deal the cards to each Player.
+	 * 
+	 * @author Luisa Molina
+	 * @author Erica Kok
 	 */
+
 	public void dealCards()
 	{
-		myDeck = new Deck();
 		for (int i = 0; i < 5; i++)
-		{
-			myPlayer[0].myHand.add(myDeck.draw());
-			myPlayer[1].myHand.add(myDeck.draw());
+		{	
+			myPlayer[0].getHand().add(myDeck.draw());
+			myPlayer[1].getHand().add(myDeck.draw());
 		}
-
 	}
-
+	
 	/**
-	 * the determineWinner method takes the number of wins of one player and
-	 * determines who the winner is
+	 * Method to determine the winner of the game.
 	 * 
-	 * @return myPlayer[0] if their number of wins is 3 if not then it returns
-	 *         myPlayer[1].
+	 * @return the winning Player
+	 * 
+	 * @author Luisa Molina
+	 * @author Erica Kok
 	 */
+
 	public Player determineWinner()
 	{
-		if (myPlayer[0].myNumberWins == 3)
+		myRound = 1;
+		if ((myPlayer[0].getNumberWins() >= myPlayer[1].getNumberWins()) && myRound == myMaxRounds)
 		{
 			return myPlayer[0];
 		}
 		else
+		{
 			return myPlayer[1];
+		}
 	}
-
+	
 	/**
-	 * resetGame method clears the hands of the players and sets the rounds back
-	 * to 0.
+	 * Method to reset the game.
 	 * 
-	 * @return true if all is done successfully.
+	 * @return true if the game was reset, otherwise return false.
+	 * 
+	 * @author Luisa Molina
+	 * @author Erica Kok
 	 */
+
 	public boolean resetGame()
-	{
-		myRound = 0;
-		myPlayer[0].myHand.myCards.removeAllElements();
-		myPlayer[1].myHand.myCards.removeAllElements();
-		myPlayer[0].myNumberWins = 0;
-		myPlayer[1].myNumberWins = 0;
-		return true;
+	{		
+		myRound = 1;
+		myPlayer[0].getHand().getCards().clear();
+		myPlayer[0].getHand().getCards().setSize(0);
+		myPlayer[1].getHand().getCards().clear();
+		myPlayer[1].getHand().getCards().setSize(0);
+		myDeck = new Deck();
+		myDeck.shuffle();
+		if(myPlayer[0].getHand().getNumberCardsInHand() == 0 && myPlayer[1].getHand().getNumberCardsInHand() == 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
-
+	
 	/**
-	 * the getPlayerUp method chooses which player to get up
+	 * Method to determine the Player who's up.
 	 * 
-	 * @return if the player's index is even then it returns myPlayer[0] if not
-	 *         it returns myPlayer[1]
+	 * @return the Player currently up
+	 * 
+	 * @author Luisa Molina
+	 * @author Erica Kok
 	 */
+
 	public Player getPlayerUp()
 	{
-		if (myIndexPlayerup % 2 == 0)
-		{
-			return myPlayer[0];
-		}
-		else
-			return myPlayer[1];
+		return myPlayer[myIndexPlayerUp];
 	}
+	
+	/**
+	 * Method to get the Player at an index.
+	 * 
+	 * @param index
+	 * 
+	 * @return the Player at that index
+	 * 
+	 * @author Luisa Molina
+	 * @author Erica Kok
+	 */
 
 	public Player getPlayer(int index)
 	{
 		return myPlayer[index];
 	}
-
+	
 	/**
-	 * getIndexPlayerUp method generates a newPlayer
+	 * Method to get the index of the Player who's up.
 	 * 
-	 * @return if the newPlayer is myPlayer[0] it returns 0 if not then it
-	 *         returns 1.
+	 * @return the index of the Player who's up
+	 * 
+	 * @author Luisa Molina
+	 * @author Erica Kok
 	 */
+
 	public int getIndexPlayerUp()
 	{
-		Player newPlayer = getPlayerUp();
-		if (myPlayer[0] == newPlayer)
-		{
-			return 0;
-		}
-		else
-			return 1;
+		return myIndexPlayerUp;
 	}
-
 }
