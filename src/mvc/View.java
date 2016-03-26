@@ -43,11 +43,13 @@ public class View extends Frame
 	private JTextField myTextField;
 	private Controller myController;
 	private JButton myStartButton;
+	private JButton myPlayAgain;
 	private JLabel myLabel;
 	private JLabel myPlayerInfo;
 	private JLabel myCPlayerInfo;
+	private JLabel myGameInfo;
 	private JFrame myFrame;
-	private Image myBlankImage;
+	private ImageIcon myBlankImage;
 	private JButton myDiscardButton;
 
 	///////////////////////
@@ -86,8 +88,7 @@ public class View extends Frame
 		myCardListener = new ButtonListener[myNumSquares];
 		myCompCardPanel = new JPanel(new GridLayout(1, 0));
 		myPlayerCardPanel = new JPanel(new GridLayout(1, 0));
-
-		ImageIcon myBlankImage = new ImageIcon("src/cards/E.GIF");
+		myBlankImage = new ImageIcon("src/cards/E.GIF");
 		/*
 		 * Sets the cards up with 2 rows of 5 cards, there backs facing up
 		 */
@@ -109,12 +110,19 @@ public class View extends Frame
 		value = myController.myPlayer.getName() + "\n" + myController.myPlayer.getNumberWins();
 		myPlayerInfo = new JLabel(value);
 
+		myGameInfo = new JLabel();
+
 		myLabel.setSize(getSize());
 		myPlayerInfo.setSize(getSize());
+		myGameInfo.setSize(getSize());
 
 		c.gridx = 0;
 		c.gridy = 4;
 		myFrame.add(myStartButton, c);
+
+		c.gridx = 0;
+		c.gridy = 5;
+		myFrame.add(myGameInfo, c);
 
 		c.gridx = 0;
 		c.gridy = 1;
@@ -244,6 +252,11 @@ public class View extends Frame
 		myPlayerInfo.setText(name + "\n" + wins);
 	}
 
+	public void setGametext(String text)
+	{
+		myGameInfo.setText(text);
+	}
+
 	/**
 	 * Makes a border around each Card, somewhat
 	 */
@@ -305,13 +318,13 @@ public class View extends Frame
 		c.fill = GridBagConstraints.HORIZONTAL;
 		for (int i = 0; i < myNumSquares; i++)
 		{
-			myPlayerCardPanel.removeMouseListener(myCardListener[i]);
+			myPlayerCardView[i].removeMouseListener(myCardListener[i]);
 		}
-		myFrame.remove(myDiscardButton);
 		c.gridx = 0;
 		c.gridy = 4;
-
+		myFrame.remove(myDiscardButton);
 		myFrame.add(myStartButton, c);
+
 	}
 
 }

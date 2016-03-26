@@ -89,6 +89,7 @@ public class Controller
 	{
 		int value;
 		Vector<Integer> myDiscards = new Vector<Integer>();
+		Vector<Card> myCards = new Vector<Card>();
 		value = myPlayer.getHand().getNumberCardsInHand();
 		for (int i = 0; i < value; i++)
 		{
@@ -96,6 +97,8 @@ public class Controller
 			{
 
 				myDiscards.add(i);
+				myCards.add(myPlayer.getHand().getCards().get(i));
+
 			}
 		}
 		ImageIcon myImage;
@@ -113,7 +116,8 @@ public class Controller
 		myPlayer.getHand().orderCards();
 		myPlayerRanking = "" + myPlayer.getHand().determineRanking();
 		myView.setCardRanking(myPlayerRanking);
-//		myView.removeDiscard();
+		myView.setGametext("You Discarded : " + myCards);
+		myView.removeDiscard();
 
 	}
 
