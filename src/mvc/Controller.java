@@ -183,10 +183,9 @@ public class Controller
 				myView.setCPlayerInfo(myModel.getPlayer(1).getName(), myModel.getPlayer(1).getNumberWins());
 			}
 			JFrame myFrame = new JFrame("Continue?");
-			int n = JOptionPane.showOptionDialog(myFrame, "Would you like to play again?",
-					"Play Again?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+			int n = JOptionPane.showOptionDialog(myFrame, "Would you like to play again?", "Play Again?",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-			System.out.println(n);
 			if (n == 0)
 			{
 				myView.playAgainOne();
