@@ -7,13 +7,13 @@ package mvc;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.*;
-
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -40,6 +40,7 @@ public class View extends Frame
 	private ButtonListener[] myCardListener;
 	private ButtonListener myStartButtonListener;
 	private ButtonListener myDiscardButtonListener;
+	private JLayeredPane myBackground;
 	private Controller myController;
 	private JButton myStartButton;
 	private JButton myPlayAgain;
@@ -49,6 +50,7 @@ public class View extends Frame
 	private JLabel myGameInfo;
 	private JFrame myFrame;
 	private ImageIcon myBlankImage;
+	private ImageIcon myBackgroundImage;
 	private JButton myDiscardButton;
 
 	///////////////////////
@@ -87,6 +89,8 @@ public class View extends Frame
 		myCardListener = new ButtonListener[myNumSquares];
 		myCompCardPanel = new JPanel(new GridLayout(1, 0));
 		myPlayerCardPanel = new JPanel(new GridLayout(1, 0));
+		myBackgroundImage = new ImageIcon("src/cards/background.jpg");
+//		myBackground = new JLayeredPane();
 		myBlankImage = new ImageIcon("src/cards/E.GIF");
 		/*
 		 * Sets the cards up with 2 rows of 5 cards, there backs facing up
@@ -108,8 +112,7 @@ public class View extends Frame
 
 		value = myController.myPlayer.getName() + "\n" + myController.myPlayer.getNumberWins();
 		myPlayerInfo = new JLabel(value);
-		
-		
+
 		value = myController.myModel.getPlayer(1).getName() + "\n" + myController.myModel.getPlayer(1).getNumberWins();
 		myCPlayerInfo = new JLabel(value);
 
@@ -143,7 +146,7 @@ public class View extends Frame
 		c.gridx = 0;
 		c.gridy = 0;
 		myFrame.add(myPlayerInfo, c);
-		
+
 		c.gridx = 1;
 		c.gridy = 0;
 		myFrame.add(myCPlayerInfo, c);
@@ -236,7 +239,7 @@ public class View extends Frame
 	{
 		myPlayerCardView[row].setIcon(image);
 	}
-	
+
 	public void changeCompImage(int row, Icon image)
 	{
 		myCompCardView[row].setIcon(image);
@@ -263,7 +266,7 @@ public class View extends Frame
 	{
 		myPlayerInfo.setText(name + "\n" + wins);
 	}
-	
+
 	public void setCPlayerInfo(String name, int wins)
 	{
 		myCPlayerInfo.setText(name + "\n" + wins);
@@ -281,35 +284,6 @@ public class View extends Frame
 	{
 		if (toggleSelected)
 		{
-			// Image image =
-			// myPlayerCardView[row].getIcon().getScaledInstance(widthX,
-			// heightY, image.SCALE_SMOOTH);
-			// icon.setImage(image);
-			//
-			// int borderWidth = 1;
-			// int spaceAroundIcon = 0;
-			// Color borderColor = Color.BLUE;
-			//
-			// BufferedImage bi = new BufferedImage(icon.getIconWidth() + (2 *
-			// borderWidth + 2 * spaceAroundIcon),
-			// icon.getIconHeight() + (2 * borderWidth + 2 * spaceAroundIcon),
-			// BufferedImage.TYPE_INT_ARGB);
-			//
-			// Graphics2D g = bi.createGraphics();
-			// g.setColor(borderColor);
-			// g.drawImage(icon.getImage(), borderWidth + spaceAroundIcon,
-			// borderWidth + spaceAroundIcon, null);
-			//
-			// BasicStroke stroke = new BasicStroke(5); // 5 pixels wide
-			// (thickness
-			// // of the border)
-			// g.setStroke(stroke);
-			//
-			// g.drawRect(0, 0, bi.getWidth() - 1, bi.getHeight() - 1);
-			// g.dispose();
-			//
-			// label = new JLabel(new ImageIcon(bi), JLabel.LEFT);
-			// label.setVerticalAlignment(SwingConstants.TOP);
 			myPlayerCardView[row].setBorder(new LineBorder(Color.RED));
 
 		}
@@ -329,6 +303,31 @@ public class View extends Frame
 		myFrame.add(myDiscardButton, c);
 	}
 
+	public void playAgainOne()
+	{
+		for (int i = 0; i < myNumSquares; i++)
+		{
+			GridBagConstraints c = new GridBagConstraints();
+			c.fill = GridBagConstraints.HORIZONTAL;
+
+			c.weightx = 1;
+			myCompCardView[i].setIcon(myBlankImage);
+			myPlayerCardView[i].setIcon(myBlankImage);
+
+			myPlayerCardPanel.add(myPlayerCardView[i], c);
+			myCompCardPanel.add(myCompCardView[i], c);
+		}
+	}
+
+	public void playAgainTwo()
+	{
+		for (int i = 0; i < myNumSquares; i++)
+		{
+			myPlayerCardView[i].addMouseListener(myCardListener[i]);
+		}
+
+	}
+
 	public void removeDiscard()
 	{
 		GridBagConstraints c = new GridBagConstraints();
@@ -341,7 +340,13 @@ public class View extends Frame
 		c.gridy = 4;
 		myFrame.remove(myDiscardButton);
 		myFrame.add(myStartButton, c);
-
+	}
+	
+	public void quit()
+	{
+		myFrame.setVisible(false);
+		myFrame.dispose();
+	    System.exit(0);
 	}
 
 }
