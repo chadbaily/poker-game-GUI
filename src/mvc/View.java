@@ -48,6 +48,7 @@ public class View extends Frame
 	private JLabel myPlayerInfo;
 	private JLabel myCPlayerInfo;
 	private JLabel myGameInfo;
+	private JLabel myBackgroundLabel;
 	private JFrame myFrame;
 	private ImageIcon myBlankImage;
 	private ImageIcon myBackgroundImage;
@@ -73,7 +74,6 @@ public class View extends Frame
 		int i;
 		myFrame = new JFrame("Swing Version");
 		myFrame.setSize(600, 600);
-		myFrame.setLayout(new GridBagLayout());
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -87,23 +87,38 @@ public class View extends Frame
 		myDiscardButton = new JButton("Discard");
 
 		myCardListener = new ButtonListener[myNumSquares];
+		
 		myCompCardPanel = new JPanel(new GridLayout(1, 0));
 		myPlayerCardPanel = new JPanel(new GridLayout(1, 0));
+		
 		myBackgroundImage = new ImageIcon("src/cards/background.jpg");
-//		myBackground = new JLayeredPane();
+		myBackgroundLabel = new JLabel(myBackgroundImage);
+		myBackgroundLabel.setLayout(new GridBagLayout());
+		myBackgroundLabel.setOpaque(false);
+		myFrame.add(myBackgroundLabel);
+
 		myBlankImage = new ImageIcon("src/cards/E.GIF");
+		myPlayerCardPanel.setOpaque(true);
+		myCompCardPanel.setOpaque(true);
 		/*
 		 * Sets the cards up with 2 rows of 5 cards, there backs facing up
 		 */
 		for (i = 0; i < myNumSquares; i++)
 		{
-			c.weightx = 1;
-			myCompCardView[i] = new JLabel(myBlankImage, JLabel.CENTER);
-			myPlayerCardView[i] = new JLabel(myBlankImage, JLabel.CENTER);
+//			c.weightx = 1;
+			myCompCardView[i] = new JLabel(myBlankImage);
+			myPlayerCardView[i] = new JLabel(myBlankImage);
+			
+//			myPlayerCardView[i].setBorder(new EmptyBorder(5, 5, 5, 5));
+			
+			myCompCardView[i].setOpaque(true);
+			myPlayerCardView[i].setOpaque(true);
 
-			myPlayerCardPanel.add(myPlayerCardView[i], c);
-			myCompCardPanel.add(myCompCardView[i], c);
+			myPlayerCardPanel.add(myPlayerCardView[i]);
+			myCompCardPanel.add(myCompCardView[i]);
 		}
+		
+		myPlayerCardPanel.setOpaque(true);
 
 		myController = controller;
 
@@ -125,31 +140,31 @@ public class View extends Frame
 
 		c.gridx = 0;
 		c.gridy = 4;
-		myFrame.add(myStartButton, c);
+		myBackgroundLabel.add(myStartButton, c);
 
 		c.gridx = 0;
 		c.gridy = 5;
-		myFrame.add(myGameInfo, c);
+		myBackgroundLabel.add(myGameInfo, c);
 
 		c.gridx = 0;
 		c.gridy = 1;
-		myFrame.add(myCompCardPanel, c);
+		myBackgroundLabel.add(myCompCardPanel, c);
 
 		c.gridx = 0;
 		c.gridy = 3;
-		myFrame.add(myPlayerCardPanel, c);
+		myBackgroundLabel.add(myPlayerCardPanel, c);
 
 		c.gridx = 1;
 		c.gridy = 2;
-		myFrame.add(myLabel, c);
+		myBackgroundLabel.add(myLabel, c);
 
 		c.gridx = 0;
 		c.gridy = 0;
-		myFrame.add(myPlayerInfo, c);
+		myBackgroundLabel.add(myPlayerInfo, c);
 
 		c.gridx = 1;
 		c.gridy = 0;
-		myFrame.add(myCPlayerInfo, c);
+		myBackgroundLabel.add(myCPlayerInfo, c);
 
 		this.associateListeners(controller);
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -284,7 +299,7 @@ public class View extends Frame
 	{
 		if (toggleSelected)
 		{
-			myPlayerCardView[row].setBorder(new LineBorder(Color.RED));
+			myPlayerCardView[row].setBorder(new LineBorder(Color.blue));
 
 		}
 		else
@@ -296,11 +311,11 @@ public class View extends Frame
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
 
-		myFrame.remove(myStartButton);
+		myBackgroundLabel.remove(myStartButton);
 		c.gridx = 0;
 		c.gridy = 4;
 
-		myFrame.add(myDiscardButton, c);
+		myBackgroundLabel.add(myDiscardButton, c);
 	}
 
 	public void playAgainOne()
@@ -338,15 +353,15 @@ public class View extends Frame
 		}
 		c.gridx = 0;
 		c.gridy = 4;
-		myFrame.remove(myDiscardButton);
-		myFrame.add(myStartButton, c);
+		myBackgroundLabel.remove(myDiscardButton);
+		myBackgroundLabel.add(myStartButton, c);
 	}
-	
+
 	public void quit()
 	{
 		myFrame.setVisible(false);
 		myFrame.dispose();
-	    System.exit(0);
+		System.exit(0);
 	}
 
 }

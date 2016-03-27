@@ -91,7 +91,7 @@ public class PokerModel
 	public Player determineWinner()
 	{
 
-		if ((myPlayer[0].getNumberWins() >= myPlayer[1].getNumberWins()) && myRound == myMaxRounds)
+		if ((myPlayer[0].getNumberWins() >= myPlayer[1].getNumberWins()) && myRound <= myMaxRounds)
 		{
 			return myPlayer[0];
 		}
