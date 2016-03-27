@@ -30,10 +30,6 @@ public class Controller
 	private int myDiscardCount = 0;
 	private int myStarts = 0;
 
-	///////////////////
-	// Methods //
-	///////////////////
-
 	/**
 	 * Controller constructor; view must be passed in since controller has
 	 * responsibility to notify view when some event takes place.
@@ -76,7 +72,7 @@ public class Controller
 		myModel.resetGame();
 		myModel.dealCards();
 		myPlayer.getHand().orderCards();
-		myPlayerRanking = "" + myModel.getPlayer(0).getHand().determineRanking();
+		myPlayerRanking = "<HTML>" + myModel.getPlayer(0).getHand().determineRanking();
 		myView.setCardRanking(myPlayerRanking);
 
 		int value;

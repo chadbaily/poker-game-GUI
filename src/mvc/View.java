@@ -40,10 +40,8 @@ public class View extends Frame
 	private ButtonListener[] myCardListener;
 	private ButtonListener myStartButtonListener;
 	private ButtonListener myDiscardButtonListener;
-	private JLayeredPane myBackground;
 	private Controller myController;
 	private JButton myStartButton;
-	private JButton myPlayAgain;
 	private JLabel myLabel;
 	private JLabel myPlayerInfo;
 	private JLabel myCPlayerInfo;
@@ -97,7 +95,7 @@ public class View extends Frame
 		myBackgroundLabel.setOpaque(false);
 		myFrame.add(myBackgroundLabel);
 
-		myBlankImage = new ImageIcon("src/cards/back111.GIF");
+		myBlankImage = new ImageIcon("src/cards/E.GIF");
 		myPlayerCardPanel.setOpaque(true);
 		myCompCardPanel.setOpaque(true);
 
@@ -167,13 +165,6 @@ public class View extends Frame
 		 c.gridx = 1;
 		 c.gridy = 0;
 		 myBackgroundLabel.add(myCPlayerInfo, c);
-
-//		JPanel myTest = new JPanel();
-//		JLabel mySecondTest = new JLabel(myBlankImage,JLabel.CENTER);
-//		mySecondTest.setOpaque(false);
-//		myTest.add(mySecondTest);
-//		myTest.setOpaque(false);
-//		myBackgroundLabel.add(myTest);
 
 		this.associateListeners(controller);
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
