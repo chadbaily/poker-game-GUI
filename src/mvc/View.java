@@ -87,38 +87,40 @@ public class View extends Frame
 		myDiscardButton = new JButton("Discard");
 
 		myCardListener = new ButtonListener[myNumSquares];
-		
+
 		myCompCardPanel = new JPanel(new GridLayout(1, 0));
 		myPlayerCardPanel = new JPanel(new GridLayout(1, 0));
-		
+
 		myBackgroundImage = new ImageIcon("src/cards/background.jpg");
 		myBackgroundLabel = new JLabel(myBackgroundImage);
 		myBackgroundLabel.setLayout(new GridBagLayout());
 		myBackgroundLabel.setOpaque(false);
 		myFrame.add(myBackgroundLabel);
 
-		myBlankImage = new ImageIcon("src/cards/E.GIF");
+		myBlankImage = new ImageIcon("src/cards/back111.GIF");
 		myPlayerCardPanel.setOpaque(true);
 		myCompCardPanel.setOpaque(true);
+
 		/*
 		 * Sets the cards up with 2 rows of 5 cards, there backs facing up
 		 */
 		for (i = 0; i < myNumSquares; i++)
 		{
-//			c.weightx = 1;
-			myCompCardView[i] = new JLabel(myBlankImage);
-			myPlayerCardView[i] = new JLabel(myBlankImage);
-			
-//			myPlayerCardView[i].setBorder(new EmptyBorder(5, 5, 5, 5));
-			
-			myCompCardView[i].setOpaque(true);
-			myPlayerCardView[i].setOpaque(true);
+			// c.weightx = 1;
+			myCompCardView[i] = new JLabel(myBlankImage,JLabel.CENTER);
+			myPlayerCardView[i] = new JLabel(myBlankImage,JLabel.CENTER);
+
+			// myPlayerCardView[i].setBorder(new EmptyBorder(5, 5, 5, 5));
+
+			myCompCardView[i].setOpaque(false);
+			myPlayerCardView[i].setOpaque(false);
 
 			myPlayerCardPanel.add(myPlayerCardView[i]);
 			myCompCardPanel.add(myCompCardView[i]);
 		}
-		
-		myPlayerCardPanel.setOpaque(true);
+
+		myPlayerCardPanel.setOpaque(false);
+		myCompCardPanel.setOpaque(false);
 
 		myController = controller;
 
@@ -138,33 +140,40 @@ public class View extends Frame
 		myCPlayerInfo.setSize(getSize());
 		myGameInfo.setSize(getSize());
 
-		c.gridx = 0;
-		c.gridy = 4;
-		myBackgroundLabel.add(myStartButton, c);
+		 c.gridx = 0;
+		 c.gridy = 4;
+		 myBackgroundLabel.add(myStartButton, c);
+		
+		 c.gridx = 0;
+		 c.gridy = 5;
+		 myBackgroundLabel.add(myGameInfo, c);
+		
+		 c.gridx = 0;
+		 c.gridy = 1;
+		 myBackgroundLabel.add(myCompCardPanel, c);
+		
+		 c.gridx = 0;
+		 c.gridy = 3;
+		 myBackgroundLabel.add(myPlayerCardPanel, c);
+		
+		 c.gridx = 1;
+		 c.gridy = 2;
+		 myBackgroundLabel.add(myLabel, c);
+		
+		 c.gridx = 0;
+		 c.gridy = 0;
+		 myBackgroundLabel.add(myPlayerInfo, c);
+		
+		 c.gridx = 1;
+		 c.gridy = 0;
+		 myBackgroundLabel.add(myCPlayerInfo, c);
 
-		c.gridx = 0;
-		c.gridy = 5;
-		myBackgroundLabel.add(myGameInfo, c);
-
-		c.gridx = 0;
-		c.gridy = 1;
-		myBackgroundLabel.add(myCompCardPanel, c);
-
-		c.gridx = 0;
-		c.gridy = 3;
-		myBackgroundLabel.add(myPlayerCardPanel, c);
-
-		c.gridx = 1;
-		c.gridy = 2;
-		myBackgroundLabel.add(myLabel, c);
-
-		c.gridx = 0;
-		c.gridy = 0;
-		myBackgroundLabel.add(myPlayerInfo, c);
-
-		c.gridx = 1;
-		c.gridy = 0;
-		myBackgroundLabel.add(myCPlayerInfo, c);
+//		JPanel myTest = new JPanel();
+//		JLabel mySecondTest = new JLabel(myBlankImage,JLabel.CENTER);
+//		mySecondTest.setOpaque(false);
+//		myTest.add(mySecondTest);
+//		myTest.setOpaque(false);
+//		myBackgroundLabel.add(myTest);
 
 		this.associateListeners(controller);
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
