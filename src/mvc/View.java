@@ -1,7 +1,8 @@
 package mvc;
 
 /**
- * View for a Poker Game
+ * View for a Poker Game, has a frame, 3 JPanels (Background, each players cards(5)), 
+ * multiple buttons, and JLabels to indicate what is happening in the game
  * @author chadbaily
  */
 import java.awt.*;
@@ -20,7 +21,7 @@ public class View extends Frame
 {
 
 	/*
-	 * Properties for the view 
+	 * Properties for the view
 	 */
 	public final static int myNumSquares = 5;
 	private JLabel[] myCompCardView;
@@ -47,7 +48,8 @@ public class View extends Frame
 	///////////////////////
 
 	/**
-	 * View constructor used to lay out the view
+	 * View constructor used to lay out the view, sets up the initial view for
+	 * what the player sees
 	 *
 	 * <pre>
 	 * pre:  none
@@ -154,7 +156,9 @@ public class View extends Frame
 		myBackgroundLabel.add(myCPlayerInfo, c);
 
 		this.associateListeners(controller);
-		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Better than
+																// the window
+																// listener
 		myFrame.setVisible(true);
 	}
 
@@ -242,6 +246,13 @@ public class View extends Frame
 		myPlayerCardView[row].setIcon(image);
 	}
 
+	/**
+	 * Changes the card image for the computerplayer, only uses cards in the
+	 * computerplayers hand
+	 * 
+	 * @param row
+	 * @param image
+	 */
 	public void changeCompImage(int row, Icon image)
 	{
 		myCompCardView[row].setIcon(image);
@@ -259,7 +270,8 @@ public class View extends Frame
 	}
 
 	/**
-	 * Sets the Player's Name and total number of wins
+	 * Sets the Player's Name and total number of wins in the view, allows it to
+	 * be updated from controller
 	 * 
 	 * @param name
 	 * @param wins
@@ -269,18 +281,31 @@ public class View extends Frame
 		myPlayerInfo.setText(name + "\n" + wins);
 	}
 
+	/**
+	 * Sets the ComputerPlayer's Name and total number of wins in the view,
+	 * allows it to be updated from controller
+	 * 
+	 * @param name
+	 * @param wins
+	 */
 	public void setCPlayerInfo(String name, int wins)
 	{
 		myCPlayerInfo.setText(name + "\n" + wins);
 	}
 
+	/**
+	 * Sets who discarded what and who won each round, with what hand. Allows
+	 * the text to be chaged from the controller
+	 * 
+	 * @param text
+	 */
 	public void setGametext(String text)
 	{
 		myGameInfo.setText(text);
 	}
 
 	/**
-	 * Makes a border around each Card, somewhat
+	 * Makes a border around each Card if the card has been selected in the view
 	 */
 	public void makeBorder(int row, boolean toggleSelected)
 	{
@@ -295,6 +320,9 @@ public class View extends Frame
 		}
 	}
 
+	/**
+	 * Removes the start button and adds the discard button
+	 */
 	public void removeStart()
 	{
 		GridBagConstraints c = new GridBagConstraints();
@@ -307,6 +335,10 @@ public class View extends Frame
 		myBackgroundLabel.add(myDiscardButton, c);
 	}
 
+	/**
+	 * Method to re-make the JPanels and JLabels that were originally used when
+	 * setting up the view
+	 */
 	public void playAgainOne()
 	{
 		for (int i = 0; i < myNumSquares; i++)
@@ -323,6 +355,10 @@ public class View extends Frame
 		}
 	}
 
+	/**
+	 * Method to re-add the mouse listeners to the JPanel and JLabel that were
+	 * disabled during removeDiscard()
+	 */
 	public void playAgainTwo()
 	{
 		for (int i = 0; i < myNumSquares; i++)
@@ -332,6 +368,11 @@ public class View extends Frame
 
 	}
 
+	/**
+	 * Method to remove the discard button and re-add the start button. Removes
+	 * the mouse listeners for the JPanel and JLabel so that cards cannot be
+	 * clicked when they are not supposed to be
+	 */
 	public void removeDiscard()
 	{
 		GridBagConstraints c = new GridBagConstraints();
@@ -346,6 +387,9 @@ public class View extends Frame
 		myBackgroundLabel.add(myStartButton, c);
 	}
 
+	/**
+	 * Method to close the frame and quit the Java App.
+	 */
 	public void quit()
 	{
 		myFrame.setVisible(false);

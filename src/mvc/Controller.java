@@ -9,8 +9,8 @@ import javax.swing.JOptionPane;
 import model.*;
 
 /**
- * Controller for the pokermodel game, has three main methods, start, discard,
- * and border
+ * Controller for the PokerModel game, has three main methods, start, discard,
+ * and border. Controls the view for the PokerModel
  * 
  * @author chadbaily
  */
@@ -27,7 +27,6 @@ public class Controller
 	public String myPlayerRanking;
 	private int myDiscardCount = 0;
 	private int myStarts = 0;
-	private int myBorders = 0;
 	Vector<Integer> myBorderIndex;
 
 	/**
@@ -81,12 +80,19 @@ public class Controller
 		ImageIcon myImage;
 		myPlayer.getHand().orderCards();
 		value = myModel.getPlayer(0).getHand().getNumberCardsInHand();
+		/*
+		 * Gets the cards in the players hand and updates the view with the new
+		 * cards
+		 */
 		for (int i = 0; i < value; i++)
 		{
 			myImage = new ImageIcon(myPlayer.getHand().getCards().get(i).getImage());
 			myView.changePlayerImage(i, myImage);
 		}
-
+		/*
+		 * Removes the start button and also re-enables the mouse listeners for
+		 * the cards
+		 */
 		myView.removeStart();
 		if (myStarts > 1)
 		{
@@ -94,6 +100,12 @@ public class Controller
 		}
 	}
 
+	/**
+	 * Method that is able to tell which cards to be discarded by if they are
+	 * selected with a border. This Method is responsiable for determining when
+	 * a round stops and when the game is over First the selected cards are
+	 * determined, then
+	 */
 	public void discard()
 	{
 		myDiscardCount++;
@@ -105,6 +117,11 @@ public class Controller
 		Vector<Card> myPlayerCards = new Vector<Card>();
 		Vector<Card> myComputerPlayerCards = new Vector<Card>();
 		value = myPlayer.getHand().getNumberCardsInHand();
+		/*
+		 * Gets the selected cards from the players hand and adds them to the
+		 * discards and the player cards. My discards representing the index at
+		 * i and myPlayerCards representing the card discarded.
+		 */
 		for (int i = 0; i < value; i++)
 		{
 			if (myPlayer.getHand().getCards().get(i).isSelected())
@@ -113,7 +130,9 @@ public class Controller
 				myPlayerCards.add(myPlayer.getHand().getCards().get(i));
 			}
 		}
-
+		/*
+		 * The auto discard for computer player
+		 */
 		for (int i = 0; i < myCompPlayerDiscards.size(); i++)
 		{
 			myComputerPlayerCards.add(myModel.getPlayer(1).getHand().getCards().get(myCompPlayerDiscards.get(i)));
@@ -125,6 +144,9 @@ public class Controller
 		myModel.dealCards();
 		value = myPlayer.getHand().getNumberCardsInHand();
 		myPlayer.getHand().orderCards();
+		/*
+		 * Changing the images to account for the new cards added to the hands
+		 */
 		for (int i = 0; i < value; i++)
 		{
 			myImage = new ImageIcon(myPlayer.getHand().getCards().get(i).getImage());
@@ -147,7 +169,8 @@ public class Controller
 		{
 			myModel.incrementRounds();
 			myBorderIndex.removeAllElements();
-			myView.removeDiscard();
+			myView.removeDiscard(); // removes the mouse listeners for the
+									// JLabels and the JPanel
 			myModel.determineWinner();
 			myBorderIndex.removeAllElements();
 			int myCardsInHand;
@@ -161,13 +184,17 @@ public class Controller
 			}
 
 			/*
-			 * If the players hand is better than the computer players, then he
+			 * If the rounds are less than five, then the hands are compared. If
+			 * the players hand is better than the computer players, then he
 			 * wins and all info is updated to show that. Otherwise the
 			 * computerPlayer wins, and all info is reflected to show that
 			 */
 			if (myModel.getRound() < 5)
 			{
 				System.out.println(myModel.getRound());
+				/*
+				 * If the player wins
+				 */
 				if (myModel.getPlayer(0).getHand().compareTo(myModel.getPlayer(1).getHand()) == 1)
 				{
 					myView.setGametext("<HTML> You Discarded : " + myPlayerCards + "<BR> The AI Discarded : "
@@ -177,6 +204,9 @@ public class Controller
 					myModel.getPlayer(0).incrementNumberWins();
 					myView.setPlayerInfo(myModel.getPlayer(0).getName(), myModel.getPlayer(0).getNumberWins());
 				}
+				/*
+				 * If the computer player wins
+				 */
 				else
 				{
 					myView.setGametext("<HTML> You Discarded : " + myPlayerCards + "<BR> The AI Discarded : "
@@ -186,6 +216,9 @@ public class Controller
 					myModel.getPlayer(1).incrementNumberWins();
 					myView.setCPlayerInfo(myModel.getPlayer(1).getName(), myModel.getPlayer(1).getNumberWins());
 				}
+				/*
+				 * How to know if you want to continue with the game or not
+				 */
 				JFrame myFrame = new JFrame("Continue?");
 				int n = JOptionPane.showOptionDialog(myFrame, "Would you like to play again?", "Play Again?",
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
@@ -203,6 +236,10 @@ public class Controller
 					myView.quit();
 				}
 			}
+			/*
+			 * If five rounds are reached, then a winner is determined and the
+			 * game exits
+			 */
 			else if (myModel.getRound() == 5)
 			{
 				Player winner = myModel.determineWinner();
@@ -217,16 +254,32 @@ public class Controller
 
 	}
 
+	/**
+	 * Method to create a border around the cards, also serves to toggleSelected
+	 * on the card that was clicked
+	 * 
+	 * @param iRow
+	 */
 	public void border(Integer iRow)
 	{
 		int row;
 		row = iRow.intValue();
+		/*
+		 * If the size of the index of cards in myBorderIndex and the card click
+		 * is not already selected, then a border is made and it is added to
+		 * myBorderIndex
+		 */
 		if (myBorderIndex.size() < 3 && !myPlayer.getHand().getCards().get(row).isSelected())
 		{
 			myBorderIndex.add(iRow);
 			myPlayer.getHand().getCards().get(row).toggleSelected();
 			myView.makeBorder(iRow, myPlayer.getHand().getCards().get(row).isSelected());
 		}
+		/*
+		 * If the card has already been clicked, then no border is made, and any
+		 * border there is taked away also removes the index of the card form
+		 * myBorderIndex
+		 */
 		else if (myPlayer.getHand().getCards().get(row).isSelected())
 		{
 			myPlayer.getHand().getCards().get(row).toggleSelected();
