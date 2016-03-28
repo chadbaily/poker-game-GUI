@@ -76,7 +76,7 @@ public class Deck
 
 		if (myCards.size() > 0)
 		{
-			Random rand = new Random();
+			
 			int x = new Random().nextInt(myCards.size());
 			Card myTemp = myCards.get(x);
 			myCards.remove(myCards.get(x));

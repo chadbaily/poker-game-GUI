@@ -18,7 +18,7 @@ import java.util.Vector;
 public class PokerHand extends Hand
 {
 
-	private int myNumberCards;
+	
 	private int myMaxNumberCards;
 	private PokerHandRanking ranking;
 	private Hand myHand;
@@ -128,8 +128,6 @@ public class PokerHand extends Hand
 	public boolean isHighCard()
 	{
 		Vector<Integer> myDiscards = new Vector<Integer>();
-		Vector<Integer> myFinalDiscards = new Vector<Integer>();
-		int count = 0;
 		ranking = null;
 		for (int i = 0; i < myCards.size() - 1; i++)
 		{
@@ -454,6 +452,7 @@ public class PokerHand extends Hand
 	 *         it returns true and the ranking is a Royal flush, if not it
 	 *         returns false.
 	 */
+	@SuppressWarnings("unused")
 	public boolean isRoyalFlush()
 	{
 		ranking = null;
@@ -470,6 +469,7 @@ public class PokerHand extends Hand
 			{
 				for (int j = 10; j < 14; j++)
 				{
+					
 					if (myCards.get(i).getType().ordinal() == j)
 					{
 						ranking = PokerHandRanking.ROYAL_FLUSH;

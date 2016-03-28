@@ -1,7 +1,6 @@
 package model;
 
 import java.awt.Image;
-import java.util.Vector;
 
 /**
  * Card is a class that simulates properties that a real card would have from a
@@ -17,7 +16,6 @@ import java.util.Vector;
  */
 public class Card
 {
-	private Vector myCard;
 	private CardSuit mySuit;
 	private CardType myType;
 	private Image myImage;
@@ -182,7 +180,8 @@ public class Card
 	}
 
 	/**
-	 * Getter method to get the image of the card from myImage for the current card.
+	 * Getter method to get the image of the card from myImage for the current
+	 * card.
 	 * 
 	 * @return myImage for the current card
 	 */

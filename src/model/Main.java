@@ -1,7 +1,6 @@
 package model;
 
-import java.awt.Toolkit;
-import java.awt.Image;
+
 import java.util.Vector;
 
 public class Main

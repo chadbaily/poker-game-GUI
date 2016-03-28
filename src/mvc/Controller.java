@@ -1,9 +1,7 @@
 package mvc;
 
-import java.awt.*;
 import java.util.Vector;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
