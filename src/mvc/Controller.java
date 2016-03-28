@@ -71,7 +71,7 @@ public class Controller
 	public void startGame()
 	{
 		myStarts++;
-		myModel.resetGame();
+		myModel.resetMVCGame();
 		myModel.dealCards();
 		myPlayer.getHand().orderCards();
 		myPlayerRanking = "<HTML>" + myModel.getPlayer(0).getHand().determineRanking();
@@ -97,6 +97,7 @@ public class Controller
 	public void discard()
 	{
 		myDiscardCount++;
+		myBorderIndex.removeAllElements();
 		int value;
 		ComputerPlayer myCompPlayer = (ComputerPlayer) myModel.getPlayer(1);
 		Vector<Integer> myCompPlayerDiscards = myCompPlayer.selectCardsToDiscard();
@@ -144,9 +145,11 @@ public class Controller
 		 */
 		if (myDiscardCount % 2 == 0)
 		{
+			myModel.incrementRounds();
+			myBorderIndex.removeAllElements();
 			myView.removeDiscard();
 			myModel.determineWinner();
-
+			myBorderIndex.removeAllElements();
 			int myCardsInHand;
 			ImageIcon myFlippedImage;
 			myPlayer.getHand().orderCards();
@@ -162,38 +165,51 @@ public class Controller
 			 * wins and all info is updated to show that. Otherwise the
 			 * computerPlayer wins, and all info is reflected to show that
 			 */
-			if (myModel.getPlayer(0).getHand().compareTo(myModel.getPlayer(1).getHand()) == 1)
+			if (myModel.getRound() < 5)
 			{
-				myView.setGametext(
-						"<HTML> You Discarded : " + myPlayerCards + "<BR> The AI Discarded : " + myComputerPlayerCards
-								+ "<BR> The Winner of this round was : " + myModel.getPlayer(0).getName() + " with a "
-								+ myModel.getPlayer(0).getHand().determineRanking());
-				myModel.getPlayer(0).incrementNumberWins();
-				myView.setPlayerInfo(myModel.getPlayer(0).getName(), myModel.getPlayer(0).getNumberWins());
-			}
-			else
-			{
-				myView.setGametext(
-						"<HTML> You Discarded : " + myPlayerCards + "<BR> The AI Discarded : " + myComputerPlayerCards
-								+ "<BR> The Winner of this round was : " + myModel.getPlayer(1).getName() + " with a "
-								+ myModel.getPlayer(1).getHand().determineRanking());
-				myModel.getPlayer(1).incrementNumberWins();
-				myView.setCPlayerInfo(myModel.getPlayer(1).getName(), myModel.getPlayer(1).getNumberWins());
-			}
-			JFrame myFrame = new JFrame("Continue?");
-			int n = JOptionPane.showOptionDialog(myFrame, "Would you like to play again?", "Play Again?",
-					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+				System.out.println(myModel.getRound());
+				if (myModel.getPlayer(0).getHand().compareTo(myModel.getPlayer(1).getHand()) == 1)
+				{
+					myView.setGametext("<HTML> You Discarded : " + myPlayerCards + "<BR> The AI Discarded : "
+							+ myComputerPlayerCards + "<BR> The Winner of this round was : "
+							+ myModel.getPlayer(0).getName() + " with a "
+							+ myModel.getPlayer(0).getHand().determineRanking());
+					myModel.getPlayer(0).incrementNumberWins();
+					myView.setPlayerInfo(myModel.getPlayer(0).getName(), myModel.getPlayer(0).getNumberWins());
+				}
+				else
+				{
+					myView.setGametext("<HTML> You Discarded : " + myPlayerCards + "<BR> The AI Discarded : "
+							+ myComputerPlayerCards + "<BR> The Winner of this round was : "
+							+ myModel.getPlayer(1).getName() + " with a "
+							+ myModel.getPlayer(1).getHand().determineRanking());
+					myModel.getPlayer(1).incrementNumberWins();
+					myView.setCPlayerInfo(myModel.getPlayer(1).getName(), myModel.getPlayer(1).getNumberWins());
+				}
+				JFrame myFrame = new JFrame("Continue?");
+				int n = JOptionPane.showOptionDialog(myFrame, "Would you like to play again?", "Play Again?",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-			/*
-			 * If the player clicks "yes" then the card images are flipped and
-			 * reset. Else the game is exited.
-			 */
-			if (n == 0)
-			{
-				myView.playAgainOne();
+				/*
+				 * If the player clicks "yes" then the card images are flipped
+				 * and reset. Else the game is exited.
+				 */
+				if (n == 0)
+				{
+					myView.playAgainOne();
+				}
+				else if (n == 1)
+				{
+					myView.quit();
+				}
 			}
-			else if (n == 1)
+			else if (myModel.getRound() == 5)
 			{
+				Player winner = myModel.determineWinner();
+				winner.incrementNumberWins();
+				JFrame myFrame = new JFrame("Continue?");
+				JOptionPane.showMessageDialog(myFrame,
+						winner.getName() + " won! with a score of " + winner.getNumberWins());
 				myView.quit();
 			}
 
@@ -203,28 +219,19 @@ public class Controller
 
 	public void border(Integer iRow)
 	{
-		myBorders++;
 		int row;
-
 		row = iRow.intValue();
-		if (myBorders > 3 && myBorders != 0)
-		{
-			myBorderIndex.add(iRow);
-			int remove = myBorderIndex.get(0);
-
-			myPlayer.getHand().getCards().get(remove).toggleSelected();
-			myView.makeBorder(remove, myPlayer.getHand().getCards().get(row).isSelected());
-			myBorderIndex.removeElementAt(0);
-
-			myPlayer.getHand().getCards().get(row).toggleSelected();
-			myView.makeBorder(iRow, myPlayer.getHand().getCards().get(row).isSelected());
-		}
-		else
+		if (myBorderIndex.size() < 3 && !myPlayer.getHand().getCards().get(row).isSelected())
 		{
 			myBorderIndex.add(iRow);
 			myPlayer.getHand().getCards().get(row).toggleSelected();
 			myView.makeBorder(iRow, myPlayer.getHand().getCards().get(row).isSelected());
 		}
-
+		else if (myPlayer.getHand().getCards().get(row).isSelected())
+		{
+			myPlayer.getHand().getCards().get(row).toggleSelected();
+			myView.makeBorder(iRow, myPlayer.getHand().getCards().get(row).isSelected());
+			myBorderIndex.remove(iRow);
+		}
 	}
 }

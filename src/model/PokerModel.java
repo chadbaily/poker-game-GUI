@@ -3,14 +3,13 @@ package model;
 /**
  * @purpose
  * 
- * Class that deals with the major components of a poker game,
- * dealing cards, switching turns, entering the winner, handling
- * the deck, etc.
+ * 			Class that deals with the major components of a poker game, dealing
+ *          cards, switching turns, entering the winner, handling the deck, etc.
  * 
  * @author Luisa Molina
  * @author Erica Kok
  * 
- *@dueDate 3/21/16
+ * @dueDate 3/21/16
  */
 
 public class PokerModel
@@ -20,7 +19,7 @@ public class PokerModel
 	private int myMaxRounds;
 	private int myRound;
 	private Deck myDeck;
-	
+
 	/**
 	 * Constructor, creates a new PokerModel with Players.
 	 * 
@@ -39,9 +38,10 @@ public class PokerModel
 		myIndexPlayerUp = 0;
 		myPlayer[0] = player;
 		myPlayer[1] = myComputerPlayer;
+		myRound = 0;
 		myMaxRounds = 5;
 	}
-	
+
 	/**
 	 * Method to switch the turns of the Players.
 	 * 
@@ -51,9 +51,19 @@ public class PokerModel
 	 * @author Erica Kok
 	 */
 
+	public void incrementRounds()
+	{
+		myRound++;
+	}
+
+	public int getRound()
+	{
+		return myRound;
+	}
+
 	public int switchTurns()
 	{
-		if(myIndexPlayerUp < myPlayer.length)
+		if (myIndexPlayerUp < myPlayer.length)
 		{
 			return myIndexPlayerUp++;
 		}
@@ -62,7 +72,7 @@ public class PokerModel
 			return myIndexPlayerUp = 0;
 		}
 	}
-	
+
 	/**
 	 * Method to deal the cards to each Player.
 	 * 
@@ -73,12 +83,12 @@ public class PokerModel
 	public void dealCards()
 	{
 		for (int i = 0; i < 5; i++)
-		{	
+		{
 			myPlayer[0].getHand().add(myDeck.draw());
 			myPlayer[1].getHand().add(myDeck.draw());
 		}
 	}
-	
+
 	/**
 	 * Method to determine the winner of the game.
 	 * 
@@ -91,7 +101,7 @@ public class PokerModel
 	public Player determineWinner()
 	{
 
-		if ((myPlayer[0].getNumberWins() >= myPlayer[1].getNumberWins()) && myRound <= myMaxRounds)
+		if ((myPlayer[0].getNumberWins() >= myPlayer[1].getNumberWins()) && myRound == myMaxRounds)
 		{
 			return myPlayer[0];
 		}
@@ -100,7 +110,7 @@ public class PokerModel
 			return myPlayer[1];
 		}
 	}
-	
+
 	/**
 	 * Method to reset the game.
 	 * 
@@ -111,7 +121,7 @@ public class PokerModel
 	 */
 
 	public boolean resetGame()
-	{		
+	{
 		myRound = 1;
 		myPlayer[0].getHand().getCards().clear();
 		myPlayer[0].getHand().getCards().setSize(0);
@@ -119,7 +129,7 @@ public class PokerModel
 		myPlayer[1].getHand().getCards().setSize(0);
 		myDeck = new Deck();
 		myDeck.shuffle();
-		if(myPlayer[0].getHand().getNumberCardsInHand() == 0 && myPlayer[1].getHand().getNumberCardsInHand() == 0)
+		if (myPlayer[0].getHand().getNumberCardsInHand() == 0 && myPlayer[1].getHand().getNumberCardsInHand() == 0)
 		{
 			return true;
 		}
@@ -128,7 +138,28 @@ public class PokerModel
 			return false;
 		}
 	}
-	
+
+	/**
+	 * Method designed to reset everything but the round, so it clears the hands
+	 */
+	public boolean resetMVCGame()
+	{
+		myPlayer[0].getHand().getCards().clear();
+		myPlayer[0].getHand().getCards().setSize(0);
+		myPlayer[1].getHand().getCards().clear();
+		myPlayer[1].getHand().getCards().setSize(0);
+		myDeck = new Deck();
+		myDeck.shuffle();
+		if (myPlayer[0].getHand().getNumberCardsInHand() == 0 && myPlayer[1].getHand().getNumberCardsInHand() == 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	/**
 	 * Method to determine the Player who's up.
 	 * 
@@ -142,7 +173,7 @@ public class PokerModel
 	{
 		return myPlayer[myIndexPlayerUp];
 	}
-	
+
 	/**
 	 * Method to get the Player at an index.
 	 * 

@@ -290,7 +290,9 @@ public class View extends Frame
 
 		}
 		else
+		{
 			myPlayerCardView[row].setBorder(new EmptyBorder(0, 0, 0, 0));
+		}
 	}
 
 	public void removeStart()
