@@ -28,10 +28,10 @@ import javax.swing.border.SoftBevelBorder;
 @SuppressWarnings("serial")
 public class View extends Frame
 {
-	//////////////////////
-	// Properties //
-	//////////////////////
 
+	/*
+	 * Properties for the view 
+	 */
 	public final static int myNumSquares = 5;
 	private JLabel[] myCompCardView;
 	private JLabel[] myPlayerCardView;
@@ -104,11 +104,8 @@ public class View extends Frame
 		 */
 		for (i = 0; i < myNumSquares; i++)
 		{
-			// c.weightx = 1;
-			myCompCardView[i] = new JLabel(myBlankImage,JLabel.CENTER);
-			myPlayerCardView[i] = new JLabel(myBlankImage,JLabel.CENTER);
-
-			// myPlayerCardView[i].setBorder(new EmptyBorder(5, 5, 5, 5));
+			myCompCardView[i] = new JLabel(myBlankImage, JLabel.CENTER);
+			myPlayerCardView[i] = new JLabel(myBlankImage, JLabel.CENTER);
 
 			myCompCardView[i].setOpaque(false);
 			myPlayerCardView[i].setOpaque(false);
@@ -138,33 +135,33 @@ public class View extends Frame
 		myCPlayerInfo.setSize(getSize());
 		myGameInfo.setSize(getSize());
 
-		 c.gridx = 0;
-		 c.gridy = 4;
-		 myBackgroundLabel.add(myStartButton, c);
-		
-		 c.gridx = 0;
-		 c.gridy = 5;
-		 myBackgroundLabel.add(myGameInfo, c);
-		
-		 c.gridx = 0;
-		 c.gridy = 1;
-		 myBackgroundLabel.add(myCompCardPanel, c);
-		
-		 c.gridx = 0;
-		 c.gridy = 3;
-		 myBackgroundLabel.add(myPlayerCardPanel, c);
-		
-		 c.gridx = 1;
-		 c.gridy = 2;
-		 myBackgroundLabel.add(myLabel, c);
-		
-		 c.gridx = 0;
-		 c.gridy = 0;
-		 myBackgroundLabel.add(myPlayerInfo, c);
-		
-		 c.gridx = 1;
-		 c.gridy = 0;
-		 myBackgroundLabel.add(myCPlayerInfo, c);
+		c.gridx = 0;
+		c.gridy = 4;
+		myBackgroundLabel.add(myStartButton, c);
+
+		c.gridx = 0;
+		c.gridy = 5;
+		myBackgroundLabel.add(myGameInfo, c);
+
+		c.gridx = 0;
+		c.gridy = 1;
+		myBackgroundLabel.add(myCompCardPanel, c);
+
+		c.gridx = 0;
+		c.gridy = 3;
+		myBackgroundLabel.add(myPlayerCardPanel, c);
+
+		c.gridx = 1;
+		c.gridy = 2;
+		myBackgroundLabel.add(myLabel, c);
+
+		c.gridx = 0;
+		c.gridy = 0;
+		myBackgroundLabel.add(myPlayerInfo, c);
+
+		c.gridx = 1;
+		c.gridy = 0;
+		myBackgroundLabel.add(myCPlayerInfo, c);
 
 		this.associateListeners(controller);
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

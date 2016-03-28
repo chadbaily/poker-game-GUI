@@ -29,6 +29,8 @@ public class Controller
 	public String myPlayerRanking;
 	private int myDiscardCount = 0;
 	private int myStarts = 0;
+	private int myBorders = 0;
+	Vector<Integer> myBorderIndex;
 
 	/**
 	 * Controller constructor; view must be passed in since controller has
@@ -45,6 +47,8 @@ public class Controller
 		myView = new View(this);
 
 		myView.setCPlayerInfo(myModel.getPlayer(1).getName(), myModel.getPlayer(1).getNumberWins());
+		myBorderIndex = new Vector<Integer>();
+
 		/*
 		 * Testing to see if the player entered a valid name for the player in
 		 * the game
@@ -182,6 +186,10 @@ public class Controller
 			int n = JOptionPane.showOptionDialog(myFrame, "Would you like to play again?", "Play Again?",
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
+			/*
+			 * If the player clicks "yes" then the card images are flipped and
+			 * reset. Else the game is exited.
+			 */
 			if (n == 0)
 			{
 				myView.playAgainOne();
@@ -197,10 +205,28 @@ public class Controller
 
 	public void border(Integer iRow)
 	{
+		myBorders++;
 		int row;
+
 		row = iRow.intValue();
-		myPlayer.getHand().getCards().get(row).toggleSelected();
-		myView.makeBorder(iRow, myPlayer.getHand().getCards().get(row).isSelected());
+		if (myBorders > 3 && myBorders != 0)
+		{
+			myBorderIndex.add(iRow);
+			int remove = myBorderIndex.get(0);
+
+			myPlayer.getHand().getCards().get(remove).toggleSelected();
+			myView.makeBorder(remove, myPlayer.getHand().getCards().get(row).isSelected());
+			myBorderIndex.removeElementAt(0);
+
+			myPlayer.getHand().getCards().get(row).toggleSelected();
+			myView.makeBorder(iRow, myPlayer.getHand().getCards().get(row).isSelected());
+		}
+		else
+		{
+			myBorderIndex.add(iRow);
+			myPlayer.getHand().getCards().get(row).toggleSelected();
+			myView.makeBorder(iRow, myPlayer.getHand().getCards().get(row).isSelected());
+		}
 
 	}
 }

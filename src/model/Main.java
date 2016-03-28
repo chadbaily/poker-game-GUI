@@ -9,16 +9,20 @@ public class Main
 
 	public static void main(String[] args)
 	{
-		Hand myHand;
-		Player myPlayer = new Player("Chad");
-		PokerModel myModel = new PokerModel(myPlayer);
-		Deck myDeck = new Deck();
-		myHand = new Hand(5);
-		myModel.dealCards();
-		Vector<Card> myCards;
-		myCards = new Vector<Card>();
+		Vector<Integer> myBorderIndex = new Vector<Integer>();
+		myBorderIndex.add(2);
+		myBorderIndex.add(3);
+		myBorderIndex.add(4);
+		myBorderIndex.removeElementAt(0);
+		myBorderIndex.add(4);
+		myBorderIndex.add(4);
+		myBorderIndex.removeElementAt(0);
+		myBorderIndex.removeElementAt(0);
+		myBorderIndex.removeElementAt(0);
+		myBorderIndex.removeElementAt(0);
+		
 
-		System.out.println(myDeck);
+		System.out.println(myBorderIndex);
 
 	}
 
