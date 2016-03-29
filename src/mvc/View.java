@@ -78,8 +78,8 @@ public class View extends Frame
 
 		myCardListener = new ButtonListener[myNumSquares];
 
-		myCompCardPanel = new JPanel(new GridLayout(1, 0));
-		myPlayerCardPanel = new JPanel(new GridLayout(1, 0));
+		myCompCardPanel = new JPanel(new GridLayout(1, 5, 8, 8));
+		myPlayerCardPanel = new JPanel(new GridLayout(1, 5, 8, 8));
 
 		myBackgroundImage = new ImageIcon("src/cards/background.jpg");
 		myBackgroundLabel = new JLabel(myBackgroundImage);

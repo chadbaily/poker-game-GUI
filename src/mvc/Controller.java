@@ -191,7 +191,6 @@ public class Controller
 			 */
 			if (myModel.getRound() < 5)
 			{
-				System.out.println(myModel.getRound());
 				/*
 				 * If the player wins
 				 */
@@ -242,12 +241,23 @@ public class Controller
 			 */
 			else if (myModel.getRound() == 5)
 			{
-				Player winner = myModel.determineWinner();
-				winner.incrementNumberWins();
-				JFrame myFrame = new JFrame("Continue?");
-				JOptionPane.showMessageDialog(myFrame,
-						winner.getName() + " won! with a score of " + winner.getNumberWins());
-				myView.quit();
+				if (myModel.getPlayer(0).getHand().compareTo(myModel.getPlayer(1).getHand()) == 1)
+				{
+					Player winner = myModel.determineWinner();
+					winner.incrementNumberWins();
+					JFrame myFrame = new JFrame("Continue?");
+					JOptionPane.showMessageDialog(myFrame,
+							winner.getName() + " won! with a score of " + winner.getNumberWins());
+					myView.quit();
+				}
+				else
+				{
+					Player winner = myModel.determineWinner();
+					JFrame myFrame = new JFrame("Continue?");
+					JOptionPane.showMessageDialog(myFrame,
+							winner.getName() + " won! with a score of " + winner.getNumberWins());
+					myView.quit();
+				}
 			}
 
 		}
