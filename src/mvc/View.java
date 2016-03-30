@@ -156,9 +156,7 @@ public class View extends Frame
 		myBackgroundLabel.add(myCPlayerInfo, c);
 
 		this.associateListeners(controller);
-		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Better than
-																// the window
-																// listener
+		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		myFrame.setVisible(true);
 	}
 
@@ -311,7 +309,7 @@ public class View extends Frame
 	{
 		if (toggleSelected)
 		{
-			myPlayerCardView[row].setBorder(new LineBorder(Color.blue,3));
+			myPlayerCardView[row].setBorder(new LineBorder(Color.blue, 3));
 
 		}
 		else
