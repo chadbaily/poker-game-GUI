@@ -311,7 +311,7 @@ public class View extends Frame
 	{
 		if (toggleSelected)
 		{
-			myPlayerCardView[row].setBorder(new LineBorder(Color.blue));
+			myPlayerCardView[row].setBorder(new LineBorder(Color.blue,3));
 
 		}
 		else
