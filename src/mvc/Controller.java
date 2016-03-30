@@ -102,58 +102,29 @@ public class Controller
 
 	/**
 	 * Method that is able to tell which cards to be discarded by if they are
-	 * selected with a border. This Method is responsiable for determining when
-	 * a round stops and when the game is over First the selected cards are
+	 * selected with a border. This Method is responsible for determining when a
+	 * round stops and when the game is over First the selected cards are
 	 * determined, then
 	 */
 	public void discard()
 	{
 		myDiscardCount++;
 		myBorderIndex.removeAllElements();
-		int value;
 		ComputerPlayer myCompPlayer = (ComputerPlayer) myModel.getPlayer(1);
 		Vector<Integer> myCompPlayerDiscards = myCompPlayer.selectCardsToDiscard();
 		Vector<Integer> myDiscards = new Vector<Integer>();
 		Vector<Card> myPlayerCards = new Vector<Card>();
 		Vector<Card> myComputerPlayerCards = new Vector<Card>();
-		value = myPlayer.getHand().getNumberCardsInHand();
-		/*
-		 * Gets the selected cards from the players hand and adds them to the
-		 * discards and the player cards. My discards representing the index at
-		 * i and myPlayerCards representing the card discarded.
-		 */
-		for (int i = 0; i < value; i++)
-		{
-			if (myPlayer.getHand().getCards().get(i).isSelected())
-			{
-				myDiscards.add(i);
-				myPlayerCards.add(myPlayer.getHand().getCards().get(i));
-			}
-		}
-		/*
-		 * The auto discard for computer player
-		 */
-		for (int i = 0; i < myCompPlayerDiscards.size(); i++)
-		{
-			myComputerPlayerCards.add(myModel.getPlayer(1).getHand().getCards().get(myCompPlayerDiscards.get(i)));
-		}
 
-		ImageIcon myImage;
-		myPlayer.getHand().discard(myDiscards);
-		myModel.getPlayer(1).getHand().discard(myCompPlayerDiscards);
-		myModel.dealCards();
-		value = myPlayer.getHand().getNumberCardsInHand();
-		myPlayer.getHand().orderCards();
 		/*
-		 * Changing the images to account for the new cards added to the hands
+		 * Discards the Player and ComputerPlayer cards, also uses a vector of
+		 * integers to correctly change the images
 		 */
-		for (int i = 0; i < value; i++)
-		{
-			myImage = new ImageIcon(myPlayer.getHand().getCards().get(i).getImage());
-			myView.changePlayerImage(i, myImage);
-			myView.makeBorder(i, false);
-		}
+		discardCards(myPlayerCards, myDiscards, myComputerPlayerCards, myCompPlayerDiscards);
 
+		/*
+		 * Updating the Game, and player ranking text
+		 */
 		myPlayer.getHand().orderCards();
 		myModel.getPlayer(1).getHand().orderCards();
 		myPlayerRanking = "" + myPlayer.getHand().determineRanking();
@@ -169,10 +140,9 @@ public class Controller
 		{
 			myModel.incrementRounds();
 			myBorderIndex.removeAllElements();
-			myView.removeDiscard(); // removes the mouse listeners for the
-									// JLabels and the JPanel
+			myView.removeDiscard();
 			myModel.determineWinner();
-			myBorderIndex.removeAllElements();
+
 			int myCardsInHand;
 			ImageIcon myFlippedImage;
 			myPlayer.getHand().orderCards();
@@ -192,29 +162,9 @@ public class Controller
 			if (myModel.getRound() < 5)
 			{
 				/*
-				 * If the player wins
+				 * Updates the winner's score and relates that to the view
 				 */
-				if (myModel.getPlayer(0).getHand().compareTo(myModel.getPlayer(1).getHand()) == 1)
-				{
-					myView.setGametext("<HTML> You Discarded : " + myPlayerCards + "<BR> The AI Discarded : "
-							+ myComputerPlayerCards + "<BR> The Winner of this round was : "
-							+ myModel.getPlayer(0).getName() + " with a "
-							+ myModel.getPlayer(0).getHand().determineRanking());
-					myModel.getPlayer(0).incrementNumberWins();
-					myView.setPlayerInfo(myModel.getPlayer(0).getName(), myModel.getPlayer(0).getNumberWins());
-				}
-				/*
-				 * If the computer player wins
-				 */
-				else
-				{
-					myView.setGametext("<HTML> You Discarded : " + myPlayerCards + "<BR> The AI Discarded : "
-							+ myComputerPlayerCards + "<BR> The Winner of this round was : "
-							+ myModel.getPlayer(1).getName() + " with a "
-							+ myModel.getPlayer(1).getHand().determineRanking());
-					myModel.getPlayer(1).incrementNumberWins();
-					myView.setCPlayerInfo(myModel.getPlayer(1).getName(), myModel.getPlayer(1).getNumberWins());
-				}
+				updateWinner(myPlayerCards, myComputerPlayerCards);
 				/*
 				 * How to know if you want to continue with the game or not
 				 */
@@ -241,23 +191,10 @@ public class Controller
 			 */
 			else if (myModel.getRound() == 5)
 			{
-				if (myModel.getPlayer(0).getHand().compareTo(myModel.getPlayer(1).getHand()) == 1)
-				{
-					Player winner = myModel.determineWinner();
-					winner.incrementNumberWins();
-					JFrame myFrame = new JFrame("Continue?");
-					JOptionPane.showMessageDialog(myFrame,
-							winner.getName() + " won! with a score of " + winner.getNumberWins());
-					myView.quit();
-				}
-				else
-				{
-					Player winner = myModel.determineWinner();
-					JFrame myFrame = new JFrame("Continue?");
-					JOptionPane.showMessageDialog(myFrame,
-							winner.getName() + " won! with a score of " + winner.getNumberWins());
-					myView.quit();
-				}
+				/*
+				 * Declares the winner of the game and updates their score
+				 */
+				declareWinner();
 			}
 
 		}
@@ -295,6 +232,107 @@ public class Controller
 			myPlayer.getHand().getCards().get(row).toggleSelected();
 			myView.makeBorder(iRow, myPlayer.getHand().getCards().get(row).isSelected());
 			myBorderIndex.remove(iRow);
+		}
+	}
+
+	/**
+	 * Method that takes in the Player and ComputerPlayerCards, then uses an
+	 * array of Integers from the cards that were discarded to flip change the
+	 * correct image
+	 * 
+	 * @param myPlayerCards
+	 * @param myDiscards
+	 * @param myComputerPlayerCards
+	 * @param myCompPlayerDiscards
+	 */
+	private void discardCards(Vector<Card> myPlayerCards, Vector<Integer> myDiscards,
+			Vector<Card> myComputerPlayerCards, Vector<Integer> myCompPlayerDiscards)
+	{
+		int value;
+
+		value = myPlayer.getHand().getNumberCardsInHand();
+		/*
+		 * Gets the selected cards from the players hand and adds them to the
+		 * discards and the player cards. My discards representing the index at
+		 * i and myPlayerCards representing the card discarded.
+		 */
+		for (int i = 0; i < value; i++)
+		{
+			if (myPlayer.getHand().getCards().get(i).isSelected())
+			{
+				myDiscards.add(i);
+				myPlayerCards.add(myPlayer.getHand().getCards().get(i));
+			}
+		}
+		/*
+		 * The auto discard for computer player
+		 */
+		for (int i = 0; i < myCompPlayerDiscards.size(); i++)
+		{
+			myComputerPlayerCards.add(myModel.getPlayer(1).getHand().getCards().get(myCompPlayerDiscards.get(i)));
+		}
+
+		ImageIcon myImage;
+		myPlayer.getHand().discard(myDiscards);
+		myModel.getPlayer(1).getHand().discard(myCompPlayerDiscards);
+		myModel.dealCards();
+		value = myPlayer.getHand().getNumberCardsInHand();
+		myPlayer.getHand().orderCards();
+		/*
+		 * Changing the images to account for the new cards added to the hands
+		 */
+		for (int i = 0; i < value; i++)
+		{
+			myImage = new ImageIcon(myPlayer.getHand().getCards().get(i).getImage());
+			myView.changePlayerImage(i, myImage);
+			myView.makeBorder(i, false);
+		}
+	}
+
+	private void updateWinner(Vector<Card> myPlayerCards, Vector<Card> myComputerPlayerCards)
+	{
+		/*
+		 * If the player wins
+		 */
+		if (myModel.getPlayer(0).getHand().compareTo(myModel.getPlayer(1).getHand()) == 1)
+		{
+			myView.setGametext("<HTML> You Discarded : " + myPlayerCards + "<BR> The AI Discarded : "
+					+ myComputerPlayerCards + "<BR> The Winner of this round was : " + myModel.getPlayer(0).getName()
+					+ " with a " + myModel.getPlayer(0).getHand().determineRanking());
+			myModel.getPlayer(0).incrementNumberWins();
+			myView.setPlayerInfo(myModel.getPlayer(0).getName(), myModel.getPlayer(0).getNumberWins());
+		}
+		/*
+		 * If the computer player wins
+		 */
+		else
+		{
+			myView.setGametext("<HTML> You Discarded : " + myPlayerCards + "<BR> The AI Discarded : "
+					+ myComputerPlayerCards + "<BR> The Winner of this round was : " + myModel.getPlayer(1).getName()
+					+ " with a " + myModel.getPlayer(1).getHand().determineRanking());
+			myModel.getPlayer(1).incrementNumberWins();
+			myView.setCPlayerInfo(myModel.getPlayer(1).getName(), myModel.getPlayer(1).getNumberWins());
+		}
+	}
+
+	private void declareWinner()
+	{
+		if (myModel.getPlayer(0).getHand().compareTo(myModel.getPlayer(1).getHand()) == 1)
+		{
+			Player winner = myModel.determineWinner();
+			winner.incrementNumberWins();
+			JFrame myFrame = new JFrame("Continue?");
+			JOptionPane.showMessageDialog(myFrame,
+					winner.getName() + " won! with a score of " + winner.getNumberWins());
+			myView.quit();
+		}
+		else
+		{
+			Player winner = myModel.determineWinner();
+			JFrame myFrame = new JFrame("Continue?");
+			JOptionPane.showMessageDialog(myFrame,
+					winner.getName() + " won! with a score of " + winner.getNumberWins());
+			myView.quit();
 		}
 	}
 }

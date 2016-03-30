@@ -116,16 +116,28 @@ public class View extends Frame
 
 		value = myController.myPlayer.getName() + "\n" + myController.myPlayer.getNumberWins();
 		myPlayerInfo = new JLabel(value);
+		myPlayerInfo.setForeground(Color.white);
 
 		value = myController.myModel.getPlayer(1).getName() + "\n" + myController.myModel.getPlayer(1).getNumberWins();
 		myCPlayerInfo = new JLabel(value);
+		myCPlayerInfo.setForeground(Color.white);
 
 		myGameInfo = new JLabel();
+		myGameInfo.setForeground(Color.white);
+
+		myLabel.setForeground(Color.white);
 
 		myLabel.setSize(getSize());
+		myLabel.setFont(new Font("Serif", Font.BOLD, 16));
+
 		myPlayerInfo.setSize(getSize());
+		myPlayerInfo.setFont(new Font("Serif", Font.BOLD, 16));
+
 		myCPlayerInfo.setSize(getSize());
+		myCPlayerInfo.setFont(new Font("Serif", Font.BOLD, 16));
+
 		myGameInfo.setSize(getSize());
+		myGameInfo.setFont(new Font("Serif", Font.BOLD, 16));
 
 		c.gridx = 0;
 		c.gridy = 4;
